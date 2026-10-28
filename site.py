@@ -6,7 +6,7 @@ import random
 # ============================================================
 
 st.set_page_config(
-    page_title="Accuracy-Musiik",
+    page_title="Accurcy Musiik",
     page_icon="🎵",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -110,7 +110,7 @@ st.markdown("""
 # LOGO
 # ============================================================
 
-st.markdown("## 🎵 Accuracy**Musiik**")
+st.markdown("## 🎵 Accurcy **Musiik**")
 
 # ============================================================
 # HERO
@@ -596,6 +596,6 @@ if st.button("🚀 ANALISAR MÚSICA"):
 
 st.divider()
 st.caption(
-    "Accuracy Music © 2026 — "
+    "Accurcy Musiik © 2026 — "
     "Projeto acadêmico de Ciência de Dados e Machine Learning"
 )

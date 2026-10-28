@@ -6,7 +6,7 @@ import random
 # ============================================================
 
 st.set_page_config(
-    page_title="Accurcy Musiik",
+    page_title="Accurcy-Musiik",
     page_icon="🎵",
     layout="wide",
     initial_sidebar_state="collapsed"
@@ -110,7 +110,7 @@ st.markdown("""
 # LOGO
 # ============================================================
 
-st.markdown("## 🎵 Accurcy Musiik ##")
+st.markdown("## 🎵 Accurcy-Musiik ##")
 
 # ============================================================
 # HERO

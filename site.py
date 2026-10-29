@@ -6,11 +6,133 @@ import random
 # ============================================================
 
 st.set_page_config(
-    page_title="Accurcy-Musiik",
+    page_title="Accuracy Music",
     page_icon="🎵",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
+
+# ============================================================
+# TELA DE ABERTURA (SPLASH SCREEN)
+# Exibida na primeira abertura da sessão antes do site principal.
+# ============================================================
+
+if "site_started" not in st.session_state:
+    st.session_state.site_started = False
+
+if not st.session_state.site_started:
+    st.markdown("""
+    <style>
+        .stApp {
+            background: #e9e5ef;
+            color: #343044;
+        }
+        #MainMenu, footer, header { visibility: hidden; }
+        [data-testid="stSidebar"] { display: none; }
+        .block-container {
+            max-width: 920px;
+            padding-top: 7vh;
+            padding-bottom: 2rem;
+        }
+        .splash-wrap {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: splash-in .8s ease-out both;
+        }
+        .splash-art {
+            width: min(300px, 65vw);
+            margin-bottom: 22px;
+            filter: drop-shadow(0 12px 18px rgba(72, 61, 91, .10));
+        }
+        .splash-title {
+            color: #383247;
+            font-size: clamp(2.1rem, 5vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -.055em;
+            line-height: 1.05;
+            margin: 0 0 12px;
+        }
+        .splash-subtitle {
+            color: #777086;
+            font-size: 1.05rem;
+            max-width: 440px;
+            line-height: 1.65;
+            margin: 0 auto;
+        }
+        .splash-note {
+            color: #9a93a8;
+            font-size: .78rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            margin-top: 26px;
+        }
+        .stButton > button {
+            width: 100%;
+            border: 1px solid #d4cddd;
+            border-radius: 999px;
+            padding: 13px 24px;
+            background: #d4c9e4;
+            color: #383247;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(72, 61, 91, .08);
+            transition: transform .2s ease, background .2s ease;
+        }
+        .stButton > button:hover {
+            background: #c9bbdc;
+            color: #30283f;
+            border-color: #c9bbdc;
+            transform: translateY(-2px);
+        }
+        @keyframes splash-in {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .splash-wrap { animation: none; }
+        }
+    </style>
+
+    <div class="splash-wrap">
+      <svg class="splash-art" viewBox="0 0 320 260" role="img" aria-label="Ilustração minimalista de uma fita cassete musical">
+        <ellipse cx="160" cy="224" rx="102" ry="13" fill="#d7d0e2"/>
+        <g transform="rotate(-6 160 128)">
+          <rect x="48" y="48" width="224" height="154" rx="22" fill="#c8b9dc"/>
+          <rect x="58" y="58" width="204" height="134" rx="15" fill="#f3eff7" stroke="#b5a6ca" stroke-width="2"/>
+          <rect x="74" y="73" width="172" height="56" rx="9" fill="#e4ddeb"/>
+          <path d="M88 101h13l8-15 12 28 12-20 9 7h17l8-12 10 18 9-6h25" fill="none" stroke="#9c8bb8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="112" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
+          <circle cx="208" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
+          <circle cx="112" cy="153" r="8" fill="#f3eff7"/>
+          <circle cx="208" cy="153" r="8" fill="#f3eff7"/>
+          <rect x="139" y="139" width="42" height="27" rx="5" fill="#e4ddeb" stroke="#b5a6ca" stroke-width="2"/>
+          <path d="M146 145v15m8-15v15m8-15v15m8-15v15" stroke="#b5a6ca" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="72" cy="72" r="3" fill="#b5a6ca"/>
+          <circle cx="248" cy="72" r="3" fill="#b5a6ca"/>
+          <circle cx="72" cy="178" r="3" fill="#b5a6ca"/>
+          <circle cx="248" cy="178" r="3" fill="#b5a6ca"/>
+        </g>
+        <g fill="#a99ac0">
+          <path d="M55 39v-14l17-4v14a6 6 0 1 1-4-5V17l-9 2v16a6 6 0 1 1-4-5z"/>
+          <path d="M258 41v-12l14-3v12a5 5 0 1 1-4-4V24l-6 1v12a5 5 0 1 1-4-4z"/>
+        </g>
+      </svg>
+      <div class="splash-title">Accuracy Music</div>
+      <p class="splash-subtitle">Explore o som, descubra padrões e conheça o potencial da sua música.</p>
+      <div class="splash-note">Music · Data · Discovery</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    left, center, right = st.columns([1, 1.1, 1])
+    with center:
+        if st.button("Entrar no site  →", key="enter_site", use_container_width=True):
+            st.session_state.site_started = True
+            st.rerun()
+    st.stop()
 
 # ============================================================
 # CSS
@@ -18,6 +140,8 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+
+    /* Fundo geral */
     .stApp {
         background: linear-gradient(
             135deg,
@@ -28,16 +152,25 @@ st.markdown("""
         color: white;
     }
 
-    #MainMenu,
-    footer,
+    /* Remove elementos padrão */
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
     header {
         visibility: hidden;
     }
 
+    /* Container principal */
     .main {
         padding-top: 20px;
     }
 
+    /* Títulos e textos */
     h1 {
         text-align: center;
         color: #ffffff !important;
@@ -52,6 +185,7 @@ st.markdown("""
         color: #bdb8ca !important;
     }
 
+    /* Inputs */
     .stSelectbox label,
     .stNumberInput label,
     .stMultiSelect label,
@@ -61,6 +195,7 @@ st.markdown("""
         font-weight: 600;
     }
 
+    /* Botão */
     .stButton > button {
         width: 100%;
         border-radius: 12px;
@@ -82,6 +217,7 @@ st.markdown("""
         box-shadow: 0 8px 25px rgba(140, 75, 255, 0.35);
     }
 
+
     .footer {
         text-align: center;
         margin-top: 50px;
@@ -89,6 +225,7 @@ st.markdown("""
         color: #777184;
         font-size: 13px;
     }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -96,18 +233,14 @@ st.markdown("""
 # LOGO
 # ============================================================
 
-st.markdown("## 🎵 Accurcy-Musiik ##")
+st.markdown("## 🎵 Accuracy**Music**")
 
 # ============================================================
 # HERO
 # ============================================================
 
 st.title("Descubra o potencial da sua música")
-
-st.caption(
-    "Informe as características da música ou envie um arquivo "
-    "de áudio para realizar uma análise."
-)
+st.caption("Informe as características da música ou envie um arquivo de áudio para realizar uma análise.")
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA
@@ -321,69 +454,18 @@ st.divider()
 instrumentos = st.multiselect(
     "Instrumentos utilizados",
     [
-        # CORDAS
+        "Piano",
         "Violão",
         "Guitarra",
-        "Guitarra elétrica",
-        "Guitarra acústica",
         "Baixo",
-        "Contrabaixo",
-        "Ukulele",
-        "Banjo",
-        "Bandolim",
-        "Cavaquinho",
-        "Harpa",
-        "Violino",
-        "Viola",
-        "Violoncelo",
-
-        # TECLAS
-        "Piano",
-        "Teclado",
-        "Órgão",
-        "Acordeon",
-        "Sanfona",
-        "Sintetizador",
-        "Rhodes",
-        "Cravo",
-
-        # PERCUSSÃO
         "Bateria",
-        "Percussão",
-        "Cajón",
-        "Congas",
-        "Bongôs",
-        "Timbales",
-        "Pandeiro",
-        "Tamborim",
-        "Atabaque",
-        "Berimbau",
-        "Triângulo",
-        "Xilofone",
-        "Marimba",
-
-        # SOPROS
-        "Flauta",
-        "Flauta doce",
-        "Clarinete",
-        "Oboé",
-        "Fagote",
+        "Violino",
         "Saxofone",
         "Trompete",
-        "Trombone",
-        "Tuba",
-        "Trompa",
-
-        # VOZ E PRODUÇÃO DIGITAL
+        "Sintetizador",
         "Voz",
-        "Coral",
-        "Beatbox",
-        "Drum Machine",
-        "Sampler",
-        "Turntable/DJ",
-        "Loops eletrônicos",
-
-        # OUTROS
+        "Ukulele",
+        "Percussão",
         "Outro"
     ]
 )
@@ -417,12 +499,7 @@ with col2:
 # ============================================================
 
 st.subheader("🎵 Arquivo da música")
-
-st.caption(
-    "Envie o arquivo de áudio para que futuramente possamos "
-    "extrair informações automaticamente."
-)
-
+st.caption("Envie o arquivo de áudio para que futuramente possamos extrair informações automaticamente.")
 st.divider()
 
 arquivo_musica = st.file_uploader(
@@ -438,6 +515,7 @@ arquivo_musica = st.file_uploader(
 )
 
 if arquivo_musica is not None:
+
     st.success(
         f"Arquivo carregado: {arquivo_musica.name}"
     )
@@ -455,16 +533,21 @@ if arquivo_musica is not None:
 
 def gerar_resultado():
 
-    # Esta função é uma simulação.
-    # Posteriormente, será substituída pelo modelo real.
+    # --------------------------------------------------------
+    # ATENÇÃO:
+    # Esta função é apenas uma SIMULAÇÃO.
+    # Depois iremos substituir pelo modelo real do TCC.
+    # --------------------------------------------------------
 
     score = 50
 
     # BPM
     if 90 <= bpm <= 140:
         score += 10
+
     elif 70 <= bpm <= 160:
         score += 5
+
     else:
         score -= 3
 
@@ -475,7 +558,7 @@ def gerar_resultado():
         "Rap",
         "R&B",
         "Eletrônica",
-        "Funk Brasileiro"
+        "Funk"
     ]
 
     if genero in generos_favoraveis:
@@ -484,14 +567,17 @@ def gerar_resultado():
     # Duração
     if 150 <= duracao_segundos <= 240:
         score += 8
+
     elif 120 <= duracao_segundos <= 300:
         score += 4
+
     else:
         score -= 2
 
     # Instrumentos
     if len(instrumentos) >= 3:
         score += 5
+
     elif len(instrumentos) == 2:
         score += 3
 
@@ -526,22 +612,34 @@ if st.button("🚀 ANALISAR MÚSICA"):
 
     score = gerar_resultado()
 
+    # --------------------------------------------------------
     # CLASSIFICAÇÃO
+    # --------------------------------------------------------
+
     if score >= 80:
         categoria = "🔥 Alto potencial de popularidade"
+
     elif score >= 60:
         categoria = "🟢 Bom potencial de popularidade"
+
     elif score >= 40:
         categoria = "🟡 Potencial moderado"
+
     else:
         categoria = "🔵 Potencial baixo"
 
+    # ========================================================
     # RESULTADO
+    # ========================================================
+
     st.subheader("📈 Resultado da análise")
     st.metric("Potencial de popularidade", f"{score}/100")
     st.success(categoria)
 
+    # ========================================================
     # MÉTRICAS
+    # ========================================================
+
     st.write("")
 
     col1, col2, col3, col4 = st.columns(4)
@@ -558,20 +656,22 @@ if st.button("🚀 ANALISAR MÚSICA"):
     with col4:
         st.metric("Gênero", genero)
 
+    # ========================================================
     # DETALHES
+    # ========================================================
+
     st.write("")
+
     st.subheader("📊 Detalhes da análise")
 
     st.write(f"**Gênero:** {genero}")
     st.write(f"**Streaming:** {streaming}")
     st.write(f"**BPM:** {bpm}")
     st.write(f"**Duração:** {minutos}:{segundos:02d}")
-
     st.write(
         f"**Instrumentos:** "
         f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
     )
-
     st.write(f"**Acústico:** {acustico}")
     st.write(f"**Feat/parceria:** {feat}")
 
@@ -580,13 +680,10 @@ if st.button("🚀 ANALISAR MÚSICA"):
     else:
         st.write("**Arquivo:** Nenhum arquivo enviado")
 
+
 # ============================================================
 # RODAPÉ
 # ============================================================
 
 st.divider()
-
-st.caption(
-    "Accurcy Musiik © 2026 — "
-    "Projeto acadêmico de Ciência de Dados e Machine Learning"
-)
+st.caption("Accuracy Music © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

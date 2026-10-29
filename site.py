@@ -18,6 +18,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+
     /* Fundo geral */
     .stApp {
         background: linear-gradient(
@@ -101,6 +102,7 @@ st.markdown("""
         color: #777184;
         font-size: 13px;
     }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -115,7 +117,6 @@ st.markdown("## 🎵 Accurcy-Musiik ##")
 # ============================================================
 
 st.title("Descubra o potencial da sua música")
-
 st.caption(
     "Informe as características da música ou envie um arquivo "
     "de áudio para realizar uma análise."
@@ -429,12 +430,10 @@ with col2:
 # ============================================================
 
 st.subheader("🎵 Arquivo da música")
-
 st.caption(
     "Envie o arquivo de áudio para que futuramente possamos "
     "extrair informações automaticamente."
 )
-
 st.divider()
 
 arquivo_musica = st.file_uploader(
@@ -578,12 +577,10 @@ if st.button("🚀 ANALISAR MÚSICA"):
     st.write(f"**Streaming:** {streaming}")
     st.write(f"**BPM:** {bpm}")
     st.write(f"**Duração:** {minutos}:{segundos:02d}")
-
     st.write(
         f"**Instrumentos:** "
         f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
     )
-
     st.write(f"**Acústico:** {acustico}")
     st.write(f"**Feat/parceria:** {feat}")
 
@@ -592,12 +589,12 @@ if st.button("🚀 ANALISAR MÚSICA"):
     else:
         st.write("**Arquivo:** Nenhum arquivo enviado")
 
+
 # ============================================================
 # RODAPÉ
 # ============================================================
 
 st.divider()
-
 st.caption(
     "Accurcy Musiik © 2026 — "
     "Projeto acadêmico de Ciência de Dados e Machine Learning"

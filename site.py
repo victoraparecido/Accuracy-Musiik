@@ -1,0 +1,689 @@
+import streamlit as st
+import random
+
+# ============================================================
+# CONFIGURAÇÃO DA PÁGINA
+# ============================================================
+
+st.set_page_config(
+    page_title="Accuracy Music",
+    page_icon="🎵",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
+
+# ============================================================
+# TELA DE ABERTURA (SPLASH SCREEN)
+# Exibida na primeira abertura da sessão antes do site principal.
+# ============================================================
+
+if "site_started" not in st.session_state:
+    st.session_state.site_started = False
+
+if not st.session_state.site_started:
+    st.markdown("""
+    <style>
+        .stApp {
+            background: #e9e5ef;
+            color: #343044;
+        }
+        #MainMenu, footer, header { visibility: hidden; }
+        [data-testid="stSidebar"] { display: none; }
+        .block-container {
+            max-width: 920px;
+            padding-top: 7vh;
+            padding-bottom: 2rem;
+        }
+        .splash-wrap {
+            min-height: 65vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            animation: splash-in .8s ease-out both;
+        }
+        .splash-art {
+            width: min(300px, 65vw);
+            margin-bottom: 22px;
+            filter: drop-shadow(0 12px 18px rgba(72, 61, 91, .10));
+        }
+        .splash-title {
+            color: #383247;
+            font-size: clamp(2.1rem, 5vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -.055em;
+            line-height: 1.05;
+            margin: 0 0 12px;
+        }
+        .splash-subtitle {
+            color: #777086;
+            font-size: 1.05rem;
+            max-width: 440px;
+            line-height: 1.65;
+            margin: 0 auto;
+        }
+        .splash-note {
+            color: #9a93a8;
+            font-size: .78rem;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            margin-top: 26px;
+        }
+        .stButton > button {
+            width: 100%;
+            border: 1px solid #d4cddd;
+            border-radius: 999px;
+            padding: 13px 24px;
+            background: #d4c9e4;
+            color: #383247;
+            font-size: 1rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(72, 61, 91, .08);
+            transition: transform .2s ease, background .2s ease;
+        }
+        .stButton > button:hover {
+            background: #c9bbdc;
+            color: #30283f;
+            border-color: #c9bbdc;
+            transform: translateY(-2px);
+        }
+        @keyframes splash-in {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .splash-wrap { animation: none; }
+        }
+    </style>
+
+    <div class="splash-wrap">
+      <svg class="splash-art" viewBox="0 0 320 260" role="img" aria-label="Ilustração minimalista de uma fita cassete musical">
+        <ellipse cx="160" cy="224" rx="102" ry="13" fill="#d7d0e2"/>
+        <g transform="rotate(-6 160 128)">
+          <rect x="48" y="48" width="224" height="154" rx="22" fill="#c8b9dc"/>
+          <rect x="58" y="58" width="204" height="134" rx="15" fill="#f3eff7" stroke="#b5a6ca" stroke-width="2"/>
+          <rect x="74" y="73" width="172" height="56" rx="9" fill="#e4ddeb"/>
+          <path d="M88 101h13l8-15 12 28 12-20 9 7h17l8-12 10 18 9-6h25" fill="none" stroke="#9c8bb8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="112" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
+          <circle cx="208" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
+          <circle cx="112" cy="153" r="8" fill="#f3eff7"/>
+          <circle cx="208" cy="153" r="8" fill="#f3eff7"/>
+          <rect x="139" y="139" width="42" height="27" rx="5" fill="#e4ddeb" stroke="#b5a6ca" stroke-width="2"/>
+          <path d="M146 145v15m8-15v15m8-15v15m8-15v15" stroke="#b5a6ca" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="72" cy="72" r="3" fill="#b5a6ca"/>
+          <circle cx="248" cy="72" r="3" fill="#b5a6ca"/>
+          <circle cx="72" cy="178" r="3" fill="#b5a6ca"/>
+          <circle cx="248" cy="178" r="3" fill="#b5a6ca"/>
+        </g>
+        <g fill="#a99ac0">
+          <path d="M55 39v-14l17-4v14a6 6 0 1 1-4-5V17l-9 2v16a6 6 0 1 1-4-5z"/>
+          <path d="M258 41v-12l14-3v12a5 5 0 1 1-4-4V24l-6 1v12a5 5 0 1 1-4-4z"/>
+        </g>
+      </svg>
+      <div class="splash-title">Accuracy Music</div>
+      <p class="splash-subtitle">Explore o som, descubra padrões e conheça o potencial da sua música.</p>
+      <div class="splash-note">Music · Data · Discovery</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    left, center, right = st.columns([1, 1.1, 1])
+    with center:
+        if st.button("Entrar no site  →", key="enter_site", use_container_width=True):
+            st.session_state.site_started = True
+            st.rerun()
+    st.stop()
+
+# ============================================================
+# CSS
+# ============================================================
+
+st.markdown("""
+<style>
+
+    /* Fundo geral */
+    .stApp {
+        background: linear-gradient(
+            135deg,
+            #090714 0%,
+            #100b22 50%,
+            #080611 100%
+        );
+        color: white;
+    }
+
+    /* Remove elementos padrão */
+    #MainMenu {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
+    /* Container principal */
+    .main {
+        padding-top: 20px;
+    }
+
+    /* Títulos e textos */
+    h1 {
+        text-align: center;
+        color: #ffffff !important;
+        margin-bottom: 10px;
+    }
+
+    h2, h3 {
+        color: #ffffff !important;
+    }
+
+    .stCaption {
+        color: #bdb8ca !important;
+    }
+
+    /* Inputs */
+    .stSelectbox label,
+    .stNumberInput label,
+    .stMultiSelect label,
+    .stRadio label,
+    .stFileUploader label {
+        color: #e5e1ec !important;
+        font-weight: 600;
+    }
+
+    /* Botão */
+    .stButton > button {
+        width: 100%;
+        border-radius: 12px;
+        border: none;
+        padding: 14px;
+        background: linear-gradient(
+            90deg,
+            #7b3ff2,
+            #a45cff
+        );
+        color: white;
+        font-size: 17px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(140, 75, 255, 0.35);
+    }
+
+
+    .footer {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        color: #777184;
+        font-size: 13px;
+    }
+
+</style>
+""", unsafe_allow_html=True)
+
+# ============================================================
+# LOGO
+# ============================================================
+
+st.markdown("## 🎵 Accuracy**Music**")
+
+# ============================================================
+# HERO
+# ============================================================
+
+st.title("Descubra o potencial da sua música")
+st.caption("Informe as características da música ou envie um arquivo de áudio para realizar uma análise.")
+
+# ============================================================
+# INFORMAÇÕES DA MÚSICA
+# ============================================================
+
+st.subheader("🎧 Informações da música")
+st.caption("Preencha as informações abaixo.")
+st.divider()
+
+# ============================================================
+# PRIMEIRA LINHA
+# ============================================================
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    bpm = st.number_input(
+        "BPM",
+        min_value=40,
+        max_value=250,
+        value=120,
+        step=1,
+        help="Batidas por minuto da música."
+    )
+
+with col2:
+    genero = st.selectbox(
+        "Gênero musical",
+        [
+            # ROCK
+            "Rock",
+            "Rock Alternativo",
+            "Hard Rock",
+            "Punk Rock",
+            "Indie Rock",
+            "Pop Rock",
+            "Grunge",
+            "Rock Psicodélico",
+
+            # POP
+            "Pop",
+            "Synthpop",
+            "Electropop",
+            "Dance Pop",
+            "Indie Pop",
+            "K-Pop",
+            "J-Pop",
+            "Pop Latino",
+
+            # HIP-HOP / RAP
+            "Hip-Hop",
+            "Rap",
+            "Trap",
+            "Drill",
+            "Boom Bap",
+            "Gangsta Rap",
+            "Conscious Rap",
+            "Lo-fi Hip-Hop",
+
+            # ELETRÔNICA
+            "Eletrônica",
+            "House",
+            "Deep House",
+            "Tech House",
+            "Techno",
+            "Trance",
+            "Dubstep",
+            "Drum & Bass",
+            "EDM",
+            "Future Bass",
+
+            # JAZZ
+            "Jazz",
+            "Bebop",
+            "Swing",
+            "Smooth Jazz",
+            "Jazz Fusion",
+            "Free Jazz",
+
+            # CLÁSSICA
+            "Música Clássica",
+            "Barroco",
+            "Romântica",
+            "Ópera",
+            "Sinfônica",
+
+            # BLUES
+            "Blues",
+            "Delta Blues",
+            "Chicago Blues",
+            "Electric Blues",
+            "Blues Rock",
+
+            # COUNTRY
+            "Country",
+            "Country Pop",
+            "Bluegrass",
+            "Outlaw Country",
+            "Country Rock",
+
+            # LATIN
+            "Latin",
+            "Reggaeton",
+            "Salsa",
+            "Bachata",
+            "Merengue",
+            "Latin Pop",
+
+            # MÚSICA BRASILEIRA
+            "Música Brasileira",
+            "MPB",
+            "Sertanejo",
+            "Funk Brasileiro",
+            "Pagode",
+            "Samba",
+            "Forró",
+            "Bossa Nova",
+            "Axé",
+
+            # R&B / SOUL
+            "R&B",
+            "Contemporary R&B",
+            "Neo Soul",
+            "Soul",
+            "Funk Soul",
+            "Motown",
+
+            # REGGAE
+            "Reggae",
+            "Dancehall",
+            "Dub",
+            "Ska",
+
+            # METAL
+            "Metal",
+            "Heavy Metal",
+            "Thrash Metal",
+            "Death Metal",
+            "Black Metal",
+            "Metalcore",
+
+            # FOLK
+            "Folk",
+            "Indie Folk",
+            "Folk Rock",
+            "Acoustic Folk",
+            "Contemporary Folk",
+
+            # GOSPEL
+            "Gospel",
+            "Contemporary Gospel",
+            "Gospel Rock",
+            "Gospel R&B",
+
+            # OUTROS
+            "Outro"
+        ]
+    )
+
+with col3:
+    streaming = st.selectbox(
+        "Streaming usado",
+        [
+            "Spotify",
+            "YouTube Music",
+            "Apple Music",
+            "Amazon Music",
+            "Deezer",
+            "SoundCloud",
+            "Outro"
+        ]
+    )
+
+# ============================================================
+# DURAÇÃO
+# ============================================================
+
+st.subheader("⏱️ Duração")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    minutos = st.number_input(
+        "Minutos",
+        min_value=0,
+        max_value=20,
+        value=3,
+        step=1
+    )
+
+with col2:
+    segundos = st.number_input(
+        "Segundos",
+        min_value=0,
+        max_value=59,
+        value=30,
+        step=1
+    )
+
+duracao_segundos = (minutos * 60) + segundos
+
+# ============================================================
+# INSTRUMENTOS
+# ============================================================
+
+st.subheader("🎸 Instrumentos")
+st.caption("Selecione os instrumentos presentes na música.")
+st.divider()
+
+instrumentos = st.multiselect(
+    "Instrumentos utilizados",
+    [
+        "Piano",
+        "Violão",
+        "Guitarra",
+        "Baixo",
+        "Bateria",
+        "Violino",
+        "Saxofone",
+        "Trompete",
+        "Sintetizador",
+        "Voz",
+        "Ukulele",
+        "Percussão",
+        "Outro"
+    ]
+)
+
+# ============================================================
+# CARACTERÍSTICAS
+# ============================================================
+
+st.subheader("🎛️ Características")
+st.caption("Informe algumas características adicionais da música.")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    acustico = st.radio(
+        "A música é acústica?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+with col2:
+    feat = st.radio(
+        "Possui feat/parceria?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+# ============================================================
+# ARQUIVO DE ÁUDIO
+# ============================================================
+
+st.subheader("🎵 Arquivo da música")
+st.caption("Envie o arquivo de áudio para que futuramente possamos extrair informações automaticamente.")
+st.divider()
+
+arquivo_musica = st.file_uploader(
+    "Escolha o arquivo de áudio",
+    type=[
+        "mp3",
+        "wav",
+        "m4a",
+        "flac",
+        "ogg"
+    ],
+    help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+)
+
+if arquivo_musica is not None:
+
+    st.success(
+        f"Arquivo carregado: {arquivo_musica.name}"
+    )
+
+    st.audio(arquivo_musica)
+
+    st.info(
+        "A análise automática do áudio será integrada "
+        "ao modelo de Machine Learning em uma próxima etapa."
+    )
+
+# ============================================================
+# FUNÇÃO DE PREVISÃO
+# ============================================================
+
+def gerar_resultado():
+
+    # --------------------------------------------------------
+    # ATENÇÃO:
+    # Esta função é apenas uma SIMULAÇÃO.
+    # Depois iremos substituir pelo modelo real do TCC.
+    # --------------------------------------------------------
+
+    score = 50
+
+    # BPM
+    if 90 <= bpm <= 140:
+        score += 10
+
+    elif 70 <= bpm <= 160:
+        score += 5
+
+    else:
+        score -= 3
+
+    # Gênero
+    generos_favoraveis = [
+        "Pop",
+        "Hip-Hop",
+        "Rap",
+        "R&B",
+        "Eletrônica",
+        "Funk"
+    ]
+
+    if genero in generos_favoraveis:
+        score += 8
+
+    # Duração
+    if 150 <= duracao_segundos <= 240:
+        score += 8
+
+    elif 120 <= duracao_segundos <= 300:
+        score += 4
+
+    else:
+        score -= 2
+
+    # Instrumentos
+    if len(instrumentos) >= 3:
+        score += 5
+
+    elif len(instrumentos) == 2:
+        score += 3
+
+    # Acústico
+    if acustico == "Sim":
+        score += 2
+
+    # Feat
+    if feat == "Sim":
+        score += 5
+
+    # Arquivo de áudio
+    if arquivo_musica is not None:
+        score += 3
+
+    # Pequena variação aleatória
+    score += random.randint(-5, 5)
+
+    # Limita entre 0 e 100
+    score = max(0, min(100, score))
+
+    return score
+
+
+# ============================================================
+# BOTÃO ANALISAR
+# ============================================================
+
+st.write("")
+
+if st.button("🚀 ANALISAR MÚSICA"):
+
+    score = gerar_resultado()
+
+    # --------------------------------------------------------
+    # CLASSIFICAÇÃO
+    # --------------------------------------------------------
+
+    if score >= 80:
+        categoria = "🔥 Alto potencial de popularidade"
+
+    elif score >= 60:
+        categoria = "🟢 Bom potencial de popularidade"
+
+    elif score >= 40:
+        categoria = "🟡 Potencial moderado"
+
+    else:
+        categoria = "🔵 Potencial baixo"
+
+    # ========================================================
+    # RESULTADO
+    # ========================================================
+
+    st.subheader("📈 Resultado da análise")
+    st.metric("Potencial de popularidade", f"{score}/100")
+    st.success(categoria)
+
+    # ========================================================
+    # MÉTRICAS
+    # ========================================================
+
+    st.write("")
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    with col1:
+        st.metric("BPM", bpm)
+
+    with col2:
+        st.metric("Duração", f"{minutos}:{segundos:02d}")
+
+    with col3:
+        st.metric("Instrumentos", len(instrumentos))
+
+    with col4:
+        st.metric("Gênero", genero)
+
+    # ========================================================
+    # DETALHES
+    # ========================================================
+
+    st.write("")
+
+    st.subheader("📊 Detalhes da análise")
+
+    st.write(f"**Gênero:** {genero}")
+    st.write(f"**Streaming:** {streaming}")
+    st.write(f"**BPM:** {bpm}")
+    st.write(f"**Duração:** {minutos}:{segundos:02d}")
+    st.write(
+        f"**Instrumentos:** "
+        f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
+    )
+    st.write(f"**Acústico:** {acustico}")
+    st.write(f"**Feat/parceria:** {feat}")
+
+    if arquivo_musica:
+        st.write(f"**Arquivo:** {arquivo_musica.name}")
+    else:
+        st.write("**Arquivo:** Nenhum arquivo enviado")
+
+
+# ============================================================
+# RODAPÉ
+# ============================================================
+
+st.divider()
+st.caption("Accuracy Music © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

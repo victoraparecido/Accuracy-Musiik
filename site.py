@@ -1,5 +1,6 @@
 import streamlit as st
 import random
+import time
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -24,8 +25,8 @@ if not st.session_state.site_started:
     st.markdown("""
     <style>
         .stApp {
-            background: #e9e5ef;
-            color: #343044;
+            background: linear-gradient(135deg, #3b087a 0%, #5b16a8 52%, #26004f 100%);
+            color: #ffffff;
         }
         #MainMenu, footer, header { visibility: hidden; }
         [data-testid="stSidebar"] { display: none; }
@@ -49,7 +50,7 @@ if not st.session_state.site_started:
             filter: drop-shadow(0 12px 18px rgba(72, 61, 91, .10));
         }
         .splash-title {
-            color: #383247;
+            color: #ffffff;
             font-size: clamp(2.1rem, 5vw, 3.4rem);
             font-weight: 800;
             letter-spacing: -.055em;
@@ -57,14 +58,14 @@ if not st.session_state.site_started:
             margin: 0 0 12px;
         }
         .splash-subtitle {
-            color: #777086;
+            color: #e6d7ff;
             font-size: 1.05rem;
             max-width: 440px;
             line-height: 1.65;
             margin: 0 auto;
         }
         .splash-note {
-            color: #9a93a8;
+            color: #c8a8ff;
             font-size: .78rem;
             letter-spacing: .18em;
             text-transform: uppercase;
@@ -121,7 +122,7 @@ if not st.session_state.site_started:
           <path d="M258 41v-12l14-3v12a5 5 0 1 1-4-4V24l-6 1v12a5 5 0 1 1-4-4z"/>
         </g>
       </svg>
-      <div class="splash-title">Accuracy Music</div>
+      <div class="splash-title">Accuracy Musiik</div>
       <p class="splash-subtitle">Explore o som, descubra padrões e conheça o potencial da sua música.</p>
       <div class="splash-note">Music · Data · Discovery</div>
     </div>
@@ -129,9 +130,12 @@ if not st.session_state.site_started:
 
     left, center, right = st.columns([1, 1.1, 1])
     with center:
-        if st.button("Entrar no site  →", key="enter_site", use_container_width=True):
-            st.session_state.site_started = True
-            st.rerun()
+        progress = st.progress(0, text="Preparando sua experiência musical...")
+        for value in range(1, 101):
+            time.sleep(0.025)
+            progress.progress(value, text="Carregando o Accuracy Musiik...")
+        st.session_state.site_started = True
+        st.rerun()
     st.stop()
 
 # ============================================================
@@ -145,9 +149,9 @@ st.markdown("""
     .stApp {
         background: linear-gradient(
             135deg,
-            #090714 0%,
-            #100b22 50%,
-            #080611 100%
+            #24004d 0%,
+            #4b0b87 48%,
+            #1b0038 100%
         );
         color: white;
     }
@@ -233,7 +237,7 @@ st.markdown("""
 # LOGO
 # ============================================================
 
-st.markdown("## 🎵 Accuracy**Musiik**")
+st.markdown("## 🎵 Accuracy**Music**")
 
 # ============================================================
 # HERO
@@ -686,4 +690,4 @@ if st.button("🚀 ANALISAR MÚSICA"):
 # ============================================================
 
 st.divider()
-st.caption("Accuracy Music © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")
+st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

@@ -268,12 +268,12 @@ st.markdown("""
     [data-testid="stAppViewContainer"] > .main { position: relative; z-index: 1; }
     [data-testid="stAppViewContainer"] .block-container { position: relative; z-index: 1; }
     div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(145deg, rgba(37, 0, 69, .88), rgba(23, 0, 43, .91));
+        background: linear-gradient(145deg, rgba(37, 0, 69, .54), rgba(23, 0, 43, .62));
         border: 1px solid rgba(210, 151, 255, .38) !important;
         border-radius: 24px !important;
         padding: 1.6rem 1.8rem !important;
-        box-shadow: 0 12px 42px rgba(8, 0, 20, .25), inset 0 0 28px rgba(164, 76, 255, .06);
-        backdrop-filter: blur(10px);
+        box-shadow: 0 12px 42px rgba(8, 0, 20, .32), inset 0 0 28px rgba(164, 76, 255, .10);
+        backdrop-filter: blur(5px);
     }
     .stApp { background: radial-gradient(ellipse at top, #3d0870 0%, #1b0035 68%, #120022 100%); }
 
@@ -301,7 +301,7 @@ components.html(r"""
     const canvas = doc.createElement('canvas');
     canvas.id = 'accuracy-bubble-background';
     Object.assign(canvas.style, {position:'fixed', inset:'0', width:'100vw', height:'100vh',
-      zIndex:'0', pointerEvents:'none', opacity:'0.9'});
+      zIndex:'0', pointerEvents:'none', opacity:'0.96'});
     doc.body.prepend(canvas);
     const ctx = canvas.getContext('2d');
     let w=0,h=0,balls=[],raf=0;
@@ -315,7 +315,7 @@ components.html(r"""
       for(let i=0;i<count;i++){
         const r=18+Math.random()*17;
         let b={x:r+Math.random()*(w-2*r),y:r+Math.random()*(h-2*r),r,
-          vx:(Math.random()-.5)*.85,vy:(Math.random()-.5)*.85};
+          vx:(Math.random()-.5)*1.25,vy:(Math.random()-.5)*1.25};
         let tries=0;
         while(balls.some(o=>Math.hypot(o.x-b.x,o.y-b.y)<o.r+b.r+4)&&tries++<80){
           b.x=r+Math.random()*Math.max(1,w-2*r); b.y=r+Math.random()*Math.max(1,h-2*r);

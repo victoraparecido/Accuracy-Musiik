@@ -347,6 +347,16 @@ st.title("Sua música. Novas possibilidades.")
 st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
 
 # ============================================================
+# VÍDEO DE APRESENTAÇÃO
+# Exibido logo após a tela de carregamento e apresentação do site.
+# ============================================================
+
+st.subheader("▶️ Entre no clima musical")
+st.caption("Assista ao vídeo antes de explorar os dados da sua faixa.")
+st.video("https://youtu.be/PTXA82fJPQE")
+st.write("")
+
+# ============================================================
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
 

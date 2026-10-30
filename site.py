@@ -204,10 +204,11 @@ if not st.session_state.site_started:
 st.markdown("""
 <style>
 
-    /* Fundo geral com vídeo do YouTube atrás do conteúdo */
+    /* Fundo geral transparente para o vídeo ocupar a janela inteira */
     .stApp {
-        background: #170626;
+        background: transparent !important;
         color: white;
+        overflow-x: hidden;
     }
 
     /* Camada escura fixa para manter textos e campos legíveis */
@@ -215,7 +216,7 @@ st.markdown("""
         content: "";
         position: fixed;
         inset: 0;
-        z-index: 0;
+        z-index: 1;
         pointer-events: none;
         background: linear-gradient(
             135deg,
@@ -229,24 +230,25 @@ st.markdown("""
     [data-testid="stAppViewContainer"] {
         background: transparent !important;
         position: relative;
-        z-index: 1;
+        z-index: 0;
     }
     [data-testid="stHeader"] { background: transparent !important; }
     .block-container { position: relative; z-index: 2; }
 
-    /* Iframe do vídeo em tela cheia, sem controles */
+    /* Vídeo fixo cobrindo a janela inteira, sem bordas ou recorte do container */
     .video-background {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        width: 100vw;
-        height: 56.25vw;
-        min-width: 177.78vh;
-        min-height: 100vh;
-        transform: translate(-50%, -50%);
-        border: 0;
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        min-width: 100vw !important;
+        min-height: 100vh !important;
+        max-width: none !important;
+        transform: none !important;
+        border: 0 !important;
+        outline: 0 !important;
         pointer-events: none;
-        z-index: -1;
+        z-index: 0;
         opacity: .78;
     }
 

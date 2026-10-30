@@ -133,7 +133,7 @@ if not st.session_state.site_started:
         progress = st.progress(0, text="Preparando sua experiência musical...")
         for value in range(1, 101):
             time.sleep(0.025)
-            progress.progress(value, text="...")
+            progress.progress(value, text="Carregando o Accuracy Musiik...")
         st.session_state.site_started = True
         st.rerun()
     st.stop()
@@ -169,24 +169,65 @@ st.markdown("""
         visibility: hidden;
     }
 
-    /* Container principal */
-    .main {
-        padding-top: 20px;
+    /* Espaçamento e hierarquia visual */
+    .block-container {
+        max-width: 1180px;
+        padding-top: 2.8rem;
+        padding-bottom: 4rem;
     }
 
-    /* Títulos e textos */
+    .brand-mark {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 2.4rem 0;
+        color: #e8d7ff;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -.025em;
+    }
+    .brand-mark strong { color: #ffffff; font-weight: 800; }
+
     h1 {
         text-align: center;
         color: #ffffff !important;
-        margin-bottom: 10px;
+        font-size: clamp(2.1rem, 4vw, 3.1rem) !important;
+        letter-spacing: -.04em;
+        line-height: 1.15 !important;
+        margin: 0 0 .9rem 0 !important;
+    }
+
+    .hero-copy {
+        max-width: 680px;
+        margin: 0 auto 3.2rem auto;
+        color: #d8c5f2;
+        text-align: center;
+        font-size: 1.05rem;
+        line-height: 1.8;
     }
 
     h2, h3 {
         color: #ffffff !important;
+        letter-spacing: -.02em;
+    }
+    h2 { margin-top: 2.4rem !important; margin-bottom: .35rem !important; }
+    h3 { margin-top: 2rem !important; margin-bottom: .35rem !important; }
+
+    .stCaption, [data-testid="stCaptionContainer"] {
+        color: #cbb8e5 !important;
+        line-height: 1.65;
+        margin-bottom: 1.2rem;
     }
 
-    .stCaption {
-        color: #bdb8ca !important;
+    div[data-testid="stHorizontalBlock"] { gap: 1.25rem; }
+    [data-testid="stDivider"] {
+        margin: 1.5rem 0 2rem 0;
+        opacity: .35;
+    }
+    [data-testid="stNumberInput"], [data-testid="stSelectbox"],
+    [data-testid="stMultiSelect"], [data-testid="stRadio"],
+    [data-testid="stFileUploader"] {
+        margin-bottom: .8rem;
     }
 
     /* Inputs */
@@ -237,21 +278,21 @@ st.markdown("""
 # LOGO
 # ============================================================
 
-st.markdown("## 🎵 Accuracy**Music**")
+st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</strong></div>', unsafe_allow_html=True)
 
 # ============================================================
 # HERO
 # ============================================================
 
-st.title("Descubra o potencial da sua música")
-st.caption("Informe as características da música ou envie um arquivo de áudio para realizar uma análise.")
+st.title("Sua música. Novas possibilidades.")
+st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
 
-st.subheader("🎧 Informações da música")
-st.caption("Preencha as informações abaixo.")
+st.subheader("🎧 Vamos conhecer sua faixa")
+st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
 st.divider()
 
 # ============================================================
@@ -422,7 +463,7 @@ with col3:
 # DURAÇÃO
 # ============================================================
 
-st.subheader("⏱️ Duração")
+st.subheader("⏱️ Tempo de reprodução")
 st.divider()
 
 col1, col2 = st.columns(2)
@@ -451,8 +492,8 @@ duracao_segundos = (minutos * 60) + segundos
 # INSTRUMENTOS
 # ============================================================
 
-st.subheader("🎸 Instrumentos")
-st.caption("Selecione os instrumentos presentes na música.")
+st.subheader("🎸 Elementos sonoros")
+st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
 st.divider()
 
 instrumentos = st.multiselect(
@@ -478,8 +519,8 @@ instrumentos = st.multiselect(
 # CARACTERÍSTICAS
 # ============================================================
 
-st.subheader("🎛️ Características")
-st.caption("Informe algumas características adicionais da música.")
+st.subheader("🎛️ Detalhes da faixa")
+st.caption("Conte um pouco mais sobre a produção e as parcerias.")
 st.divider()
 
 col1, col2 = st.columns(2)
@@ -502,8 +543,8 @@ with col2:
 # ARQUIVO DE ÁUDIO
 # ============================================================
 
-st.subheader("🎵 Arquivo da música")
-st.caption("Envie o arquivo de áudio para que futuramente possamos extrair informações automaticamente.")
+st.subheader("🎵 Ouça a sua faixa")
+st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
 st.divider()
 
 arquivo_musica = st.file_uploader(
@@ -612,7 +653,7 @@ def gerar_resultado():
 
 st.write("")
 
-if st.button("🚀 ANALISAR MÚSICA"):
+if st.button("🚀 Analisar potencial da faixa"):
 
     score = gerar_resultado()
 

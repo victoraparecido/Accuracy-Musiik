@@ -372,13 +372,13 @@ st.markdown("""
 
 # ============================================================
 # VÍDEO DE FUNDO
-# O vídeo começa automaticamente, sem som e em loop.
+# O vídeo começa automaticamente aos 10 segundos, sem som e em loop.
 # ============================================================
 
 st.markdown("""
 <iframe
     class="video-background"
-    src="https://www.youtube.com/embed/PTXA82fJPQE?autoplay=1&mute=1&controls=0&loop=1&playlist=PTXA82fJPQE&playsinline=1&rel=0&modestbranding=1"
+    src="https://www.youtube.com/embed/PTXA82fJPQE?autoplay=1&mute=1&controls=0&loop=1&playlist=PTXA82fJPQE&playsinline=1&rel=0&modestbranding=1&start=10"
     title="Vídeo de fundo do Accuracy Musiik"
     allow="autoplay; encrypted-media; picture-in-picture"
     referrerpolicy="strict-origin-when-cross-origin">

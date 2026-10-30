@@ -204,15 +204,50 @@ if not st.session_state.site_started:
 st.markdown("""
 <style>
 
-    /* Fundo geral */
+    /* Fundo geral com vídeo do YouTube atrás do conteúdo */
     .stApp {
+        background: #170626;
+        color: white;
+    }
+
+    /* Camada escura fixa para manter textos e campos legíveis */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
         background: linear-gradient(
             135deg,
-            #24004d 0%,
-            #4b0b87 48%,
-            #1b0038 100%
+            rgba(20, 0, 40, .78),
+            rgba(65, 8, 110, .68),
+            rgba(15, 0, 30, .82)
         );
-        color: white;
+    }
+
+    /* O conteúdo do Streamlit fica acima do vídeo */
+    [data-testid="stAppViewContainer"] {
+        background: transparent !important;
+        position: relative;
+        z-index: 1;
+    }
+    [data-testid="stHeader"] { background: transparent !important; }
+    .block-container { position: relative; z-index: 2; }
+
+    /* Iframe do vídeo em tela cheia, sem controles */
+    .video-background {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 100vw;
+        height: 56.25vw;
+        min-width: 177.78vh;
+        min-height: 100vh;
+        transform: translate(-50%, -50%);
+        border: 0;
+        pointer-events: none;
+        z-index: -1;
+        opacity: .78;
     }
 
     /* Remove elementos padrão */
@@ -334,6 +369,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ============================================================
+# VÍDEO DE FUNDO
+# O vídeo começa automaticamente, sem som e em loop.
+# ============================================================
+
+st.markdown("""
+<iframe
+    class="video-background"
+    src="https://www.youtube.com/embed/PTXA82fJPQE?autoplay=1&mute=1&controls=0&loop=1&playlist=PTXA82fJPQE&playsinline=1&rel=0&modestbranding=1"
+    title="Vídeo de fundo do Accuracy Musiik"
+    allow="autoplay; encrypted-media; picture-in-picture"
+    referrerpolicy="strict-origin-when-cross-origin">
+</iframe>
+""", unsafe_allow_html=True)
+
+# ============================================================
 # LOGO
 # ============================================================
 
@@ -345,16 +395,6 @@ st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</s
 
 st.title("Sua música. Novas possibilidades.")
 st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
-
-# ============================================================
-# VÍDEO DE APRESENTAÇÃO
-# Exibido logo após a tela de carregamento e apresentação do site.
-# ============================================================
-
-st.subheader("▶️ Entre no clima musical")
-st.caption("Assista ao vídeo antes de explorar os dados da sua faixa.")
-st.video("https://youtu.be/PTXA82fJPQE")
-st.write("")
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA

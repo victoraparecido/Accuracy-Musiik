@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import random
 import time
 
@@ -275,17 +276,117 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ============================================================
-# LOGO
+# JANELA PRINCIPAL COM BOLHAS ANIMADAS
 # ============================================================
 
-st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</strong></div>', unsafe_allow_html=True)
-
-# ============================================================
-# HERO
-# ============================================================
-
-st.title("Sua música. Novas possibilidades.")
-st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
+components.html(r"""
+<div id="music-window" aria-label="Accuracy Musiik — janela animada">
+  <canvas id="bubble-canvas" aria-hidden="true"></canvas>
+  <div class="window-chrome" aria-hidden="true">
+    <span></span><span></span><span></span>
+    <small>ACCURACY MUSIIK / SOUND LAB</small>
+  </div>
+  <div class="window-content">
+    <div class="window-brand">🎵 <span>Accuracy</span><b>Musiik</b></div>
+    <p class="window-kicker">MUSIC · DATA · DISCOVERY</p>
+    <h1>Sua música. Novas possibilidades.</h1>
+    <p class="window-description">Explore os elementos da sua faixa e descubra uma estimativa do seu potencial de popularidade.</p>
+  </div>
+</div>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  #music-window {
+    height: 330px; width: 100%; position: relative; overflow: hidden;
+    border-radius: 24px; isolation: isolate;
+    background: radial-gradient(ellipse at 50% 5%, #54129a 0%, #2b0755 54%, #18002f 100%);
+    border: 1px solid rgba(208, 153, 255, .45);
+    box-shadow: 0 0 28px rgba(139, 47, 255, .19), inset 0 0 32px rgba(139, 47, 255, .12);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #bubble-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -0; }
+  .window-chrome { position: absolute; top: 0; left: 0; right: 0; height: 42px; display: flex; align-items: center; gap: 7px; padding: 0 17px; border-bottom: 1px solid rgba(221, 183, 255, .14); background: rgba(21, 0, 42, .23); }
+  .window-chrome span { width: 8px; height: 8px; border-radius: 50%; background: #d99cff; box-shadow: 0 0 8px #b54cff; opacity: .9; }
+  .window-chrome span:nth-child(2) { background: #a96aff; }
+  .window-chrome span:nth-child(3) { background: #7b3de8; }
+  .window-chrome small { margin-left: 8px; color: rgba(237, 218, 255, .66); font-size: 9px; letter-spacing: .18em; }
+  .window-content { position: absolute; inset: 42px 20px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 18px 12px 26px; pointer-events: none; text-shadow: 0 2px 14px rgba(20,0,35,.7); }
+  .window-brand { display: flex; align-items: center; gap: 7px; color: #ead7ff; font-size: 14px; letter-spacing: -.02em; margin-bottom: 17px; }
+  .window-brand b { color: white; font-weight: 800; }
+  .window-kicker { color: #d7aaff; font-size: 10px; letter-spacing: .24em; margin: 0 0 9px; font-weight: 700; }
+  .window-content h1 { color: white; font-size: clamp(26px, 4vw, 42px); line-height: 1.12; letter-spacing: -.045em; margin: 0 0 12px; font-weight: 800; }
+  .window-description { max-width: 570px; color: #e2d0f5; font-size: 14px; line-height: 1.7; margin: 0; }
+  @media (max-width: 520px) { #music-window { height: 360px; border-radius: 18px; } .window-content { padding-left: 6px; padding-right: 6px; } .window-description { font-size: 13px; } .window-chrome small { font-size: 8px; } }
+  @media (prefers-reduced-motion: reduce) { #bubble-canvas { opacity: .6; } }
+</style>
+<script>
+(() => {
+  const canvas = document.getElementById('bubble-canvas');
+  const host = document.getElementById('music-window');
+  if (!canvas || !host) return;
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, bubbles = [], raf = 0;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize() {
+    const rect = host.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = rect.width; h = rect.height;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.max(8, Math.min(15, Math.round(w / 75)));
+    bubbles = [];
+    for (let i = 0; i < count; i++) {
+      const r = 13 + Math.random() * 17;
+      let b = { x: r + Math.random() * Math.max(1, w - 2*r), y: 45 + r + Math.random() * Math.max(1, h - 45 - 2*r), r,
+        vx: (Math.random() - .5) * 1.05, vy: (Math.random() - .5) * 1.05, phase: Math.random() * Math.PI * 2 };
+      let tries = 0;
+      while (bubbles.some(o => Math.hypot(o.x-b.x,o.y-b.y) < o.r+b.r+5) && tries++ < 50) {
+        b.x = r + Math.random() * Math.max(1, w - 2*r); b.y = 48+r+Math.random()*Math.max(1,h-48-2*r);
+      }
+      bubbles.push(b);
+    }
+  }
+  function drawBubble(b) {
+    const glow = ctx.createRadialGradient(b.x-b.r*.28,b.y-b.r*.34,1,b.x,b.y,b.r*1.35);
+    glow.addColorStop(0,'rgba(224,177,255,.38)'); glow.addColorStop(.52,'rgba(138,48,226,.22)'); glow.addColorStop(1,'rgba(70,9,126,.05)');
+    ctx.save(); ctx.shadowColor = '#bd65ff'; ctx.shadowBlur = 13;
+    ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
+    ctx.lineWidth=1.7; ctx.strokeStyle='rgba(224,157,255,.95)'; ctx.stroke();
+    ctx.shadowBlur=5; ctx.lineWidth=.8; ctx.strokeStyle='rgba(255,224,255,.75)';
+    ctx.beginPath(); ctx.arc(b.x,b.y,b.r-3,.18,Math.PI*.78); ctx.stroke();
+    ctx.restore();
+  }
+  function frame() {
+    ctx.clearRect(0,0,w,h);
+    for (const b of bubbles) {
+      b.x += b.vx; b.y += b.vy;
+      if (b.x < b.r) { b.x=b.r; b.vx=Math.abs(b.vx); }
+      if (b.x > w-b.r) { b.x=w-b.r; b.vx=-Math.abs(b.vx); }
+      if (b.y < 44+b.r) { b.y=44+b.r; b.vy=Math.abs(b.vy); }
+      if (b.y > h-b.r) { b.y=h-b.r; b.vy=-Math.abs(b.vy); }
+    }
+    // Colisões circulares: troca de velocidades na direção do impacto e pequena separação para evitar sobreposição.
+    for (let i=0;i<bubbles.length;i++) for (let j=i+1;j<bubbles.length;j++) {
+      const a=bubbles[i], b=bubbles[j], dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy), min=a.r+b.r;
+      if (dist>0 && dist<min) {
+        const nx=dx/dist, ny=dy/dist, overlap=min-dist;
+        a.x-=nx*overlap*.51; a.y-=ny*overlap*.51; b.x+=nx*overlap*.51; b.y+=ny*overlap*.51;
+        const rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+        if (rel<0) { const impulse=rel; a.vx+=impulse*nx; a.vy+=impulse*ny; b.vx-=impulse*nx; b.vy-=impulse*ny; }
+        // Amortecimento leve, dando sensação elástica sem perder o movimento.
+        a.vx*=.995; a.vy*=.995; b.vx*=.995; b.vy*=.995;
+      }
+    }
+    bubbles.forEach(drawBubble);
+    if (!reduced) raf=requestAnimationFrame(frame);
+  }
+  resize();
+  if (reduced) { bubbles.forEach(drawBubble); } else frame();
+  if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(raf); resize(); frame(); }).observe(host);
+  else window.addEventListener('resize', () => { cancelAnimationFrame(raf); resize(); frame(); });
+})();
+</script>
+""", height=350, scrolling=False)
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA

@@ -264,19 +264,6 @@ st.markdown("""
     }
 
 
-    /* O conteúdo inteiro fica numa janela única; as bolhas permanecem atrás. */
-    [data-testid="stAppViewContainer"] > .main { position: relative; z-index: 1; }
-    [data-testid="stAppViewContainer"] .block-container { position: relative; z-index: 1; }
-    div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(145deg, rgba(37, 0, 69, .54), rgba(23, 0, 43, .62));
-        border: 1px solid rgba(210, 151, 255, .38) !important;
-        border-radius: 24px !important;
-        padding: 1.6rem 1.8rem !important;
-        box-shadow: 0 12px 42px rgba(8, 0, 20, .32), inset 0 0 28px rgba(164, 76, 255, .10);
-        backdrop-filter: blur(5px);
-    }
-    .stApp { background: radial-gradient(ellipse at top, #3d0870 0%, #1b0035 68%, #120022 100%); }
-
     .footer {
         text-align: center;
         margin-top: 50px;
@@ -289,514 +276,560 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ============================================================
-# BOLHAS ANIMADAS NO PLANO DE FUNDO
+# JANELA PRINCIPAL COM BOLHAS ANIMADAS
 # ============================================================
 
 components.html(r"""
+<div id="music-window" aria-label="Accuracy Musiik — janela animada">
+  <canvas id="bubble-canvas" aria-hidden="true"></canvas>
+  <div class="window-chrome" aria-hidden="true">
+    <span></span><span></span><span></span>
+    <small>ACCURACY MUSIIK / SOUND LAB</small>
+  </div>
+  <div class="window-content">
+    <div class="window-brand">🎵 <span>Accuracy</span><b>Musiik</b></div>
+    <p class="window-kicker">MUSIC · DATA · DISCOVERY</p>
+    <h1>Sua música. Novas possibilidades.</h1>
+    <p class="window-description">Explore os elementos da sua faixa e descubra uma estimativa do seu potencial de popularidade.</p>
+  </div>
+</div>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+  #music-window {
+    height: 330px; width: 100%; position: relative; overflow: hidden;
+    border-radius: 24px; isolation: isolate;
+    background: radial-gradient(ellipse at 50% 5%, #54129a 0%, #2b0755 54%, #18002f 100%);
+    border: 1px solid rgba(208, 153, 255, .45);
+    box-shadow: 0 0 28px rgba(139, 47, 255, .19), inset 0 0 32px rgba(139, 47, 255, .12);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #bubble-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -0; }
+  .window-chrome { position: absolute; top: 0; left: 0; right: 0; height: 42px; display: flex; align-items: center; gap: 7px; padding: 0 17px; border-bottom: 1px solid rgba(221, 183, 255, .14); background: rgba(21, 0, 42, .23); }
+  .window-chrome span { width: 8px; height: 8px; border-radius: 50%; background: #d99cff; box-shadow: 0 0 8px #b54cff; opacity: .9; }
+  .window-chrome span:nth-child(2) { background: #a96aff; }
+  .window-chrome span:nth-child(3) { background: #7b3de8; }
+  .window-chrome small { margin-left: 8px; color: rgba(237, 218, 255, .66); font-size: 9px; letter-spacing: .18em; }
+  .window-content { position: absolute; inset: 42px 20px 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 18px 12px 26px; pointer-events: none; text-shadow: 0 2px 14px rgba(20,0,35,.7); }
+  .window-brand { display: flex; align-items: center; gap: 7px; color: #ead7ff; font-size: 14px; letter-spacing: -.02em; margin-bottom: 17px; }
+  .window-brand b { color: white; font-weight: 800; }
+  .window-kicker { color: #d7aaff; font-size: 10px; letter-spacing: .24em; margin: 0 0 9px; font-weight: 700; }
+  .window-content h1 { color: white; font-size: clamp(26px, 4vw, 42px); line-height: 1.12; letter-spacing: -.045em; margin: 0 0 12px; font-weight: 800; }
+  .window-description { max-width: 570px; color: #e2d0f5; font-size: 14px; line-height: 1.7; margin: 0; }
+  @media (max-width: 520px) { #music-window { height: 360px; border-radius: 18px; } .window-content { padding-left: 6px; padding-right: 6px; } .window-description { font-size: 13px; } .window-chrome small { font-size: 8px; } }
+  @media (prefers-reduced-motion: reduce) { #bubble-canvas { opacity: .6; } }
+</style>
 <script>
 (() => {
-  try {
-    const doc = window.parent.document;
-    if (doc.getElementById('accuracy-bubble-background')) return;
-    const canvas = doc.createElement('canvas');
-    canvas.id = 'accuracy-bubble-background';
-    Object.assign(canvas.style, {position:'fixed', inset:'0', width:'100vw', height:'100vh',
-      zIndex:'0', pointerEvents:'none', opacity:'0.96'});
-    doc.body.prepend(canvas);
-    const ctx = canvas.getContext('2d');
-    let w=0,h=0,balls=[],raf=0;
-    function resize(){
-      const dpr=Math.min(window.parent.devicePixelRatio||1,2);
-      w=window.parent.innerWidth; h=window.parent.innerHeight;
-      canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      const count=Math.max(12,Math.min(24,Math.round(w/65)));
-      balls=[];
-      for(let i=0;i<count;i++){
-        const r=18+Math.random()*17;
-        let b={x:r+Math.random()*(w-2*r),y:r+Math.random()*(h-2*r),r,
-          vx:(Math.random()-.5)*1.25,vy:(Math.random()-.5)*1.25};
-        let tries=0;
-        while(balls.some(o=>Math.hypot(o.x-b.x,o.y-b.y)<o.r+b.r+4)&&tries++<80){
-          b.x=r+Math.random()*Math.max(1,w-2*r); b.y=r+Math.random()*Math.max(1,h-2*r);
-        }
-        balls.push(b);
+  const canvas = document.getElementById('bubble-canvas');
+  const host = document.getElementById('music-window');
+  if (!canvas || !host) return;
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, bubbles = [], raf = 0;
+  const reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function resize() {
+    const rect = host.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = rect.width; h = rect.height;
+    canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const count = Math.max(8, Math.min(15, Math.round(w / 75)));
+    bubbles = [];
+    for (let i = 0; i < count; i++) {
+      const r = 13 + Math.random() * 17;
+      let b = { x: r + Math.random() * Math.max(1, w - 2*r), y: 45 + r + Math.random() * Math.max(1, h - 45 - 2*r), r,
+        vx: (Math.random() - .5) * 1.05, vy: (Math.random() - .5) * 1.05, phase: Math.random() * Math.PI * 2 };
+      let tries = 0;
+      while (bubbles.some(o => Math.hypot(o.x-b.x,o.y-b.y) < o.r+b.r+5) && tries++ < 50) {
+        b.x = r + Math.random() * Math.max(1, w - 2*r); b.y = 48+r+Math.random()*Math.max(1,h-48-2*r);
+      }
+      bubbles.push(b);
+    }
+  }
+  function drawBubble(b) {
+    const glow = ctx.createRadialGradient(b.x-b.r*.28,b.y-b.r*.34,1,b.x,b.y,b.r*1.35);
+    glow.addColorStop(0,'rgba(224,177,255,.38)'); glow.addColorStop(.52,'rgba(138,48,226,.22)'); glow.addColorStop(1,'rgba(70,9,126,.05)');
+    ctx.save(); ctx.shadowColor = '#bd65ff'; ctx.shadowBlur = 13;
+    ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=glow; ctx.fill();
+    ctx.lineWidth=1.7; ctx.strokeStyle='rgba(224,157,255,.95)'; ctx.stroke();
+    ctx.shadowBlur=5; ctx.lineWidth=.8; ctx.strokeStyle='rgba(255,224,255,.75)';
+    ctx.beginPath(); ctx.arc(b.x,b.y,b.r-3,.18,Math.PI*.78); ctx.stroke();
+    ctx.restore();
+  }
+  function frame() {
+    ctx.clearRect(0,0,w,h);
+    for (const b of bubbles) {
+      b.x += b.vx; b.y += b.vy;
+      if (b.x < b.r) { b.x=b.r; b.vx=Math.abs(b.vx); }
+      if (b.x > w-b.r) { b.x=w-b.r; b.vx=-Math.abs(b.vx); }
+      if (b.y < 44+b.r) { b.y=44+b.r; b.vy=Math.abs(b.vy); }
+      if (b.y > h-b.r) { b.y=h-b.r; b.vy=-Math.abs(b.vy); }
+    }
+    // Colisões circulares: troca de velocidades na direção do impacto e pequena separação para evitar sobreposição.
+    for (let i=0;i<bubbles.length;i++) for (let j=i+1;j<bubbles.length;j++) {
+      const a=bubbles[i], b=bubbles[j], dx=b.x-a.x, dy=b.y-a.y, dist=Math.hypot(dx,dy), min=a.r+b.r;
+      if (dist>0 && dist<min) {
+        const nx=dx/dist, ny=dy/dist, overlap=min-dist;
+        a.x-=nx*overlap*.51; a.y-=ny*overlap*.51; b.x+=nx*overlap*.51; b.y+=ny*overlap*.51;
+        const rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+        if (rel<0) { const impulse=rel; a.vx+=impulse*nx; a.vy+=impulse*ny; b.vx-=impulse*nx; b.vy-=impulse*ny; }
+        // Amortecimento leve, dando sensação elástica sem perder o movimento.
+        a.vx*=.995; a.vy*=.995; b.vx*=.995; b.vy*=.995;
       }
     }
-    function draw(b){
-      const g=ctx.createRadialGradient(b.x-b.r*.3,b.y-b.r*.35,1,b.x,b.y,b.r*1.4);
-      g.addColorStop(0,'rgba(222,170,255,.28)'); g.addColorStop(.55,'rgba(132,35,218,.17)'); g.addColorStop(1,'rgba(64,0,115,.015)');
-      ctx.save(); ctx.shadowColor='#bd58ff'; ctx.shadowBlur=17;
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2); ctx.fillStyle=g; ctx.fill();
-      ctx.lineWidth=1.8; ctx.strokeStyle='rgba(211,132,255,.85)'; ctx.stroke();
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r-3,.15,Math.PI*.78); ctx.lineWidth=1; ctx.strokeStyle='rgba(255,226,255,.65)'; ctx.stroke(); ctx.restore();
-    }
-    function frame(){
-      ctx.clearRect(0,0,w,h);
-      for(const b of balls){b.x+=b.vx;b.y+=b.vy;
-        if(b.x<b.r){b.x=b.r;b.vx=Math.abs(b.vx)} if(b.x>w-b.r){b.x=w-b.r;b.vx=-Math.abs(b.vx)}
-        if(b.y<b.r){b.y=b.r;b.vy=Math.abs(b.vy)} if(b.y>h-b.r){b.y=h-b.r;b.vy=-Math.abs(b.vy)}
-      }
-      for(let i=0;i<balls.length;i++) for(let j=i+1;j<balls.length;j++){
-        const a=balls[i],b=balls[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy),min=a.r+b.r;
-        if(d>0&&d<min){const nx=dx/d,ny=dy/d,overlap=min-d;
-          a.x-=nx*overlap*.5;a.y-=ny*overlap*.5;b.x+=nx*overlap*.5;b.y+=ny*overlap*.5;
-          const rel=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
-          if(rel<0){a.vx+=rel*nx;a.vy+=rel*ny;b.vx-=rel*nx;b.vy-=rel*ny;}
-        }
-      }
-      balls.forEach(draw); raf=window.parent.requestAnimationFrame(frame);
-    }
-    resize(); frame();
-    new window.parent.ResizeObserver(()=>{window.parent.cancelAnimationFrame(raf);resize();frame()}).observe(doc.documentElement);
-  } catch(e) { /* Se o navegador isolar o componente, o layout continua utilizável. */ }
+    bubbles.forEach(drawBubble);
+    if (!reduced) raf=requestAnimationFrame(frame);
+  }
+  resize();
+  if (reduced) { bubbles.forEach(drawBubble); } else frame();
+  if (window.ResizeObserver) new ResizeObserver(() => { cancelAnimationFrame(raf); resize(); frame(); }).observe(host);
+  else window.addEventListener('resize', () => { cancelAnimationFrame(raf); resize(); frame(); });
 })();
 </script>
-""", height=1, scrolling=False)
+""", height=350, scrolling=False)
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
-with st.container(border=True):
 
-    st.subheader("🎧 Vamos conhecer sua faixa")
-    st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
-    st.divider()
+st.subheader("🎧 Vamos conhecer sua faixa")
+st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
+st.divider()
 
-    # ============================================================
-    # PRIMEIRA LINHA
-    # ============================================================
+# ============================================================
+# PRIMEIRA LINHA
+# ============================================================
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-    with col1:
-        bpm = st.number_input(
-            "BPM",
-            min_value=40,
-            max_value=250,
-            value=120,
-            step=1,
-            help="Batidas por minuto da música."
-        )
+with col1:
+    bpm = st.number_input(
+        "BPM",
+        min_value=40,
+        max_value=250,
+        value=120,
+        step=1,
+        help="Batidas por minuto da música."
+    )
 
-    with col2:
-        genero = st.selectbox(
-            "Gênero musical",
-            [
-                # ROCK
-                "Rock",
-                "Rock Alternativo",
-                "Hard Rock",
-                "Punk Rock",
-                "Indie Rock",
-                "Pop Rock",
-                "Grunge",
-                "Rock Psicodélico",
-
-                # POP
-                "Pop",
-                "Synthpop",
-                "Electropop",
-                "Dance Pop",
-                "Indie Pop",
-                "K-Pop",
-                "J-Pop",
-                "Pop Latino",
-
-                # HIP-HOP / RAP
-                "Hip-Hop",
-                "Rap",
-                "Trap",
-                "Drill",
-                "Boom Bap",
-                "Gangsta Rap",
-                "Conscious Rap",
-                "Lo-fi Hip-Hop",
-
-                # ELETRÔNICA
-                "Eletrônica",
-                "House",
-                "Deep House",
-                "Tech House",
-                "Techno",
-                "Trance",
-                "Dubstep",
-                "Drum & Bass",
-                "EDM",
-                "Future Bass",
-
-                # JAZZ
-                "Jazz",
-                "Bebop",
-                "Swing",
-                "Smooth Jazz",
-                "Jazz Fusion",
-                "Free Jazz",
-
-                # CLÁSSICA
-                "Música Clássica",
-                "Barroco",
-                "Romântica",
-                "Ópera",
-                "Sinfônica",
-
-                # BLUES
-                "Blues",
-                "Delta Blues",
-                "Chicago Blues",
-                "Electric Blues",
-                "Blues Rock",
-
-                # COUNTRY
-                "Country",
-                "Country Pop",
-                "Bluegrass",
-                "Outlaw Country",
-                "Country Rock",
-
-                # LATIN
-                "Latin",
-                "Reggaeton",
-                "Salsa",
-                "Bachata",
-                "Merengue",
-                "Latin Pop",
-
-                # MÚSICA BRASILEIRA
-                "Música Brasileira",
-                "MPB",
-                "Sertanejo",
-                "Funk Brasileiro",
-                "Pagode",
-                "Samba",
-                "Forró",
-                "Bossa Nova",
-                "Axé",
-
-                # R&B / SOUL
-                "R&B",
-                "Contemporary R&B",
-                "Neo Soul",
-                "Soul",
-                "Funk Soul",
-                "Motown",
-
-                # REGGAE
-                "Reggae",
-                "Dancehall",
-                "Dub",
-                "Ska",
-
-                # METAL
-                "Metal",
-                "Heavy Metal",
-                "Thrash Metal",
-                "Death Metal",
-                "Black Metal",
-                "Metalcore",
-
-                # FOLK
-                "Folk",
-                "Indie Folk",
-                "Folk Rock",
-                "Acoustic Folk",
-                "Contemporary Folk",
-
-                # GOSPEL
-                "Gospel",
-                "Contemporary Gospel",
-                "Gospel Rock",
-                "Gospel R&B",
-
-                # OUTROS
-                "Outro"
-            ]
-        )
-
-    with col3:
-        streaming = st.selectbox(
-            "Streaming usado",
-            [
-                "Spotify",
-                "YouTube Music",
-                "Apple Music",
-                "Amazon Music",
-                "Deezer",
-                "SoundCloud",
-                "Outro"
-            ]
-        )
-
-    # ============================================================
-    # DURAÇÃO
-    # ============================================================
-
-    st.subheader("⏱️ Tempo de reprodução")
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        minutos = st.number_input(
-            "Minutos",
-            min_value=0,
-            max_value=20,
-            value=3,
-            step=1
-        )
-
-    with col2:
-        segundos = st.number_input(
-            "Segundos",
-            min_value=0,
-            max_value=59,
-            value=30,
-            step=1
-        )
-
-    duracao_segundos = (minutos * 60) + segundos
-
-    # ============================================================
-    # INSTRUMENTOS
-    # ============================================================
-
-    st.subheader("🎸 Elementos sonoros")
-    st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
-    st.divider()
-
-    instrumentos = st.multiselect(
-        "Instrumentos utilizados",
+with col2:
+    genero = st.selectbox(
+        "Gênero musical",
         [
-            "Piano",
-            "Violão",
-            "Guitarra",
-            "Baixo",
-            "Bateria",
-            "Violino",
-            "Saxofone",
-            "Trompete",
-            "Sintetizador",
-            "Voz",
-            "Ukulele",
-            "Percussão",
+            # ROCK
+            "Rock",
+            "Rock Alternativo",
+            "Hard Rock",
+            "Punk Rock",
+            "Indie Rock",
+            "Pop Rock",
+            "Grunge",
+            "Rock Psicodélico",
+
+            # POP
+            "Pop",
+            "Synthpop",
+            "Electropop",
+            "Dance Pop",
+            "Indie Pop",
+            "K-Pop",
+            "J-Pop",
+            "Pop Latino",
+
+            # HIP-HOP / RAP
+            "Hip-Hop",
+            "Rap",
+            "Trap",
+            "Drill",
+            "Boom Bap",
+            "Gangsta Rap",
+            "Conscious Rap",
+            "Lo-fi Hip-Hop",
+
+            # ELETRÔNICA
+            "Eletrônica",
+            "House",
+            "Deep House",
+            "Tech House",
+            "Techno",
+            "Trance",
+            "Dubstep",
+            "Drum & Bass",
+            "EDM",
+            "Future Bass",
+
+            # JAZZ
+            "Jazz",
+            "Bebop",
+            "Swing",
+            "Smooth Jazz",
+            "Jazz Fusion",
+            "Free Jazz",
+
+            # CLÁSSICA
+            "Música Clássica",
+            "Barroco",
+            "Romântica",
+            "Ópera",
+            "Sinfônica",
+
+            # BLUES
+            "Blues",
+            "Delta Blues",
+            "Chicago Blues",
+            "Electric Blues",
+            "Blues Rock",
+
+            # COUNTRY
+            "Country",
+            "Country Pop",
+            "Bluegrass",
+            "Outlaw Country",
+            "Country Rock",
+
+            # LATIN
+            "Latin",
+            "Reggaeton",
+            "Salsa",
+            "Bachata",
+            "Merengue",
+            "Latin Pop",
+
+            # MÚSICA BRASILEIRA
+            "Música Brasileira",
+            "MPB",
+            "Sertanejo",
+            "Funk Brasileiro",
+            "Pagode",
+            "Samba",
+            "Forró",
+            "Bossa Nova",
+            "Axé",
+
+            # R&B / SOUL
+            "R&B",
+            "Contemporary R&B",
+            "Neo Soul",
+            "Soul",
+            "Funk Soul",
+            "Motown",
+
+            # REGGAE
+            "Reggae",
+            "Dancehall",
+            "Dub",
+            "Ska",
+
+            # METAL
+            "Metal",
+            "Heavy Metal",
+            "Thrash Metal",
+            "Death Metal",
+            "Black Metal",
+            "Metalcore",
+
+            # FOLK
+            "Folk",
+            "Indie Folk",
+            "Folk Rock",
+            "Acoustic Folk",
+            "Contemporary Folk",
+
+            # GOSPEL
+            "Gospel",
+            "Contemporary Gospel",
+            "Gospel Rock",
+            "Gospel R&B",
+
+            # OUTROS
             "Outro"
         ]
     )
 
-    # ============================================================
-    # CARACTERÍSTICAS
-    # ============================================================
-
-    st.subheader("🎛️ Detalhes da faixa")
-    st.caption("Conte um pouco mais sobre a produção e as parcerias.")
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        acustico = st.radio(
-            "A música é acústica?",
-            ["Sim", "Não"],
-            horizontal=True
-        )
-
-    with col2:
-        feat = st.radio(
-            "Possui feat/parceria?",
-            ["Sim", "Não"],
-            horizontal=True
-        )
-
-    # ============================================================
-    # ARQUIVO DE ÁUDIO
-    # ============================================================
-
-    st.subheader("🎵 Ouça a sua faixa")
-    st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
-    st.divider()
-
-    arquivo_musica = st.file_uploader(
-        "Escolha o arquivo de áudio",
-        type=[
-            "mp3",
-            "wav",
-            "m4a",
-            "flac",
-            "ogg"
-        ],
-        help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+with col3:
+    streaming = st.selectbox(
+        "Streaming usado",
+        [
+            "Spotify",
+            "YouTube Music",
+            "Apple Music",
+            "Amazon Music",
+            "Deezer",
+            "SoundCloud",
+            "Outro"
+        ]
     )
 
+# ============================================================
+# DURAÇÃO
+# ============================================================
+
+st.subheader("⏱️ Tempo de reprodução")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    minutos = st.number_input(
+        "Minutos",
+        min_value=0,
+        max_value=20,
+        value=3,
+        step=1
+    )
+
+with col2:
+    segundos = st.number_input(
+        "Segundos",
+        min_value=0,
+        max_value=59,
+        value=30,
+        step=1
+    )
+
+duracao_segundos = (minutos * 60) + segundos
+
+# ============================================================
+# INSTRUMENTOS
+# ============================================================
+
+st.subheader("🎸 Elementos sonoros")
+st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
+st.divider()
+
+instrumentos = st.multiselect(
+    "Instrumentos utilizados",
+    [
+        "Piano",
+        "Violão",
+        "Guitarra",
+        "Baixo",
+        "Bateria",
+        "Violino",
+        "Saxofone",
+        "Trompete",
+        "Sintetizador",
+        "Voz",
+        "Ukulele",
+        "Percussão",
+        "Outro"
+    ]
+)
+
+# ============================================================
+# CARACTERÍSTICAS
+# ============================================================
+
+st.subheader("🎛️ Detalhes da faixa")
+st.caption("Conte um pouco mais sobre a produção e as parcerias.")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    acustico = st.radio(
+        "A música é acústica?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+with col2:
+    feat = st.radio(
+        "Possui feat/parceria?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+# ============================================================
+# ARQUIVO DE ÁUDIO
+# ============================================================
+
+st.subheader("🎵 Ouça a sua faixa")
+st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
+st.divider()
+
+arquivo_musica = st.file_uploader(
+    "Escolha o arquivo de áudio",
+    type=[
+        "mp3",
+        "wav",
+        "m4a",
+        "flac",
+        "ogg"
+    ],
+    help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+)
+
+if arquivo_musica is not None:
+
+    st.success(
+        f"Arquivo carregado: {arquivo_musica.name}"
+    )
+
+    st.audio(arquivo_musica)
+
+    st.info(
+        "A análise automática do áudio será integrada "
+        "ao modelo de Machine Learning em uma próxima etapa."
+    )
+
+# ============================================================
+# FUNÇÃO DE PREVISÃO
+# ============================================================
+
+def gerar_resultado():
+
+    # --------------------------------------------------------
+    # ATENÇÃO:
+    # Esta função é apenas uma SIMULAÇÃO.
+    # Depois iremos substituir pelo modelo real do TCC.
+    # --------------------------------------------------------
+
+    score = 50
+
+    # BPM
+    if 90 <= bpm <= 140:
+        score += 10
+
+    elif 70 <= bpm <= 160:
+        score += 5
+
+    else:
+        score -= 3
+
+    # Gênero
+    generos_favoraveis = [
+        "Pop",
+        "Hip-Hop",
+        "Rap",
+        "R&B",
+        "Eletrônica",
+        "Funk"
+    ]
+
+    if genero in generos_favoraveis:
+        score += 8
+
+    # Duração
+    if 150 <= duracao_segundos <= 240:
+        score += 8
+
+    elif 120 <= duracao_segundos <= 300:
+        score += 4
+
+    else:
+        score -= 2
+
+    # Instrumentos
+    if len(instrumentos) >= 3:
+        score += 5
+
+    elif len(instrumentos) == 2:
+        score += 3
+
+    # Acústico
+    if acustico == "Sim":
+        score += 2
+
+    # Feat
+    if feat == "Sim":
+        score += 5
+
+    # Arquivo de áudio
     if arquivo_musica is not None:
+        score += 3
 
-        st.success(
-            f"Arquivo carregado: {arquivo_musica.name}"
-        )
+    # Pequena variação aleatória
+    score += random.randint(-5, 5)
 
-        st.audio(arquivo_musica)
+    # Limita entre 0 e 100
+    score = max(0, min(100, score))
 
-        st.info(
-            "A análise automática do áudio será integrada "
-            "ao modelo de Machine Learning em uma próxima etapa."
-        )
-
-    # ============================================================
-    # FUNÇÃO DE PREVISÃO
-    # ============================================================
-
-    def gerar_resultado():
-
-        # --------------------------------------------------------
-        # ATENÇÃO:
-        # Esta função é apenas uma SIMULAÇÃO.
-        # Depois iremos substituir pelo modelo real do TCC.
-        # --------------------------------------------------------
-
-        score = 50
-
-        # BPM
-        if 90 <= bpm <= 140:
-            score += 10
-
-        elif 70 <= bpm <= 160:
-            score += 5
-
-        else:
-            score -= 3
-
-        # Gênero
-        generos_favoraveis = [
-            "Pop",
-            "Hip-Hop",
-            "Rap",
-            "R&B",
-            "Eletrônica",
-            "Funk"
-        ]
-
-        if genero in generos_favoraveis:
-            score += 8
-
-        # Duração
-        if 150 <= duracao_segundos <= 240:
-            score += 8
-
-        elif 120 <= duracao_segundos <= 300:
-            score += 4
-
-        else:
-            score -= 2
-
-        # Instrumentos
-        if len(instrumentos) >= 3:
-            score += 5
-
-        elif len(instrumentos) == 2:
-            score += 3
-
-        # Acústico
-        if acustico == "Sim":
-            score += 2
-
-        # Feat
-        if feat == "Sim":
-            score += 5
-
-        # Arquivo de áudio
-        if arquivo_musica is not None:
-            score += 3
-
-        # Pequena variação aleatória
-        score += random.randint(-5, 5)
-
-        # Limita entre 0 e 100
-        score = max(0, min(100, score))
-
-        return score
+    return score
 
 
-    # ============================================================
-    # BOTÃO ANALISAR
-    # ============================================================
+# ============================================================
+# BOTÃO ANALISAR
+# ============================================================
+
+st.write("")
+
+if st.button("🚀 Analisar potencial da faixa"):
+
+    score = gerar_resultado()
+
+    # --------------------------------------------------------
+    # CLASSIFICAÇÃO
+    # --------------------------------------------------------
+
+    if score >= 80:
+        categoria = "🔥 Alto potencial de popularidade"
+
+    elif score >= 60:
+        categoria = "🟢 Bom potencial de popularidade"
+
+    elif score >= 40:
+        categoria = "🟡 Potencial moderado"
+
+    else:
+        categoria = "🔵 Potencial baixo"
+
+    # ========================================================
+    # RESULTADO
+    # ========================================================
+
+    st.subheader("📈 Resultado da análise")
+    st.metric("Potencial de popularidade", f"{score}/100")
+    st.success(categoria)
+
+    # ========================================================
+    # MÉTRICAS
+    # ========================================================
 
     st.write("")
 
-    if st.button("🚀 Analisar potencial da faixa"):
+    col1, col2, col3, col4 = st.columns(4)
 
-        score = gerar_resultado()
+    with col1:
+        st.metric("BPM", bpm)
 
-        # --------------------------------------------------------
-        # CLASSIFICAÇÃO
-        # --------------------------------------------------------
+    with col2:
+        st.metric("Duração", f"{minutos}:{segundos:02d}")
 
-        if score >= 80:
-            categoria = "🔥 Alto potencial de popularidade"
+    with col3:
+        st.metric("Instrumentos", len(instrumentos))
 
-        elif score >= 60:
-            categoria = "🟢 Bom potencial de popularidade"
+    with col4:
+        st.metric("Gênero", genero)
 
-        elif score >= 40:
-            categoria = "🟡 Potencial moderado"
+    # ========================================================
+    # DETALHES
+    # ========================================================
 
-        else:
-            categoria = "🔵 Potencial baixo"
+    st.write("")
 
-        # ========================================================
-        # RESULTADO
-        # ========================================================
+    st.subheader("📊 Detalhes da análise")
 
-        st.subheader("📈 Resultado da análise")
-        st.metric("Potencial de popularidade", f"{score}/100")
-        st.success(categoria)
+    st.write(f"**Gênero:** {genero}")
+    st.write(f"**Streaming:** {streaming}")
+    st.write(f"**BPM:** {bpm}")
+    st.write(f"**Duração:** {minutos}:{segundos:02d}")
+    st.write(
+        f"**Instrumentos:** "
+        f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
+    )
+    st.write(f"**Acústico:** {acustico}")
+    st.write(f"**Feat/parceria:** {feat}")
 
-        # ========================================================
-        # MÉTRICAS
-        # ========================================================
-
-        st.write("")
-
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            st.metric("BPM", bpm)
-
-        with col2:
-            st.metric("Duração", f"{minutos}:{segundos:02d}")
-
-        with col3:
-            st.metric("Instrumentos", len(instrumentos))
-
-        with col4:
-            st.metric("Gênero", genero)
-
-        # ========================================================
-        # DETALHES
-        # ========================================================
-
-        st.write("")
-
-        st.subheader("📊 Detalhes da análise")
-
-        st.write(f"**Gênero:** {genero}")
-        st.write(f"**Streaming:** {streaming}")
-        st.write(f"**BPM:** {bpm}")
-        st.write(f"**Duração:** {minutos}:{segundos:02d}")
-        st.write(
-            f"**Instrumentos:** "
-            f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
-        )
-        st.write(f"**Acústico:** {acustico}")
-        st.write(f"**Feat/parceria:** {feat}")
-
-        if arquivo_musica:
-            st.write(f"**Arquivo:** {arquivo_musica.name}")
-        else:
-            st.write("**Arquivo:** Nenhum arquivo enviado")
+    if arquivo_musica:
+        st.write(f"**Arquivo:** {arquivo_musica.name}")
+    else:
+        st.write("**Arquivo:** Nenhum arquivo enviado")
 
 
-    # ============================================================
-    # RODAPÉ
-    # ============================================================
+# ============================================================
+# RODAPÉ
+# ============================================================
 
-    st.divider()
-    st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")
+st.divider()
+st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

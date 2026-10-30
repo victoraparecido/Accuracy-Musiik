@@ -185,15 +185,15 @@ st.markdown("""
     /* Espaçamento e hierarquia visual */
     .block-container {
         max-width: 1180px;
-        padding-top: 2.8rem;
-        padding-bottom: 4rem;
+        padding-top: 1.8rem;
+        padding-bottom: 2.8rem;
     }
 
     .brand-mark {
         display: flex;
         align-items: center;
         gap: 9px;
-        margin: 0 0 2.4rem 0;
+        margin: 0 0 1.6rem 0;
         color: #e8d7ff;
         font-size: 1.35rem;
         font-weight: 600;
@@ -212,35 +212,35 @@ st.markdown("""
 
     .hero-copy {
         max-width: 680px;
-        margin: 0 auto 3.2rem auto;
+        margin: 0 auto 2.2rem auto;
         color: #d8c5f2;
         text-align: center;
         font-size: 1.05rem;
-        line-height: 1.8;
+        line-height: 1.65;
     }
 
     h2, h3 {
         color: #ffffff !important;
         letter-spacing: -.02em;
     }
-    h2 { margin-top: 2.4rem !important; margin-bottom: .35rem !important; }
-    h3 { margin-top: 2rem !important; margin-bottom: .35rem !important; }
+    h2 { margin-top: 1.7rem !important; margin-bottom: .3rem !important; }
+    h3 { margin-top: 1.45rem !important; margin-bottom: .3rem !important; }
 
     .stCaption, [data-testid="stCaptionContainer"] {
         color: #cbb8e5 !important;
         line-height: 1.65;
-        margin-bottom: 1.2rem;
+        margin-bottom: .8rem;
     }
 
-    div[data-testid="stHorizontalBlock"] { gap: 1.25rem; }
+    div[data-testid="stHorizontalBlock"] { gap: 1rem; }
     [data-testid="stDivider"] {
-        margin: 1.5rem 0 2rem 0;
+        margin: 1rem 0 1.35rem 0;
         opacity: .35;
     }
     [data-testid="stNumberInput"], [data-testid="stSelectbox"],
     [data-testid="stMultiSelect"], [data-testid="stRadio"],
     [data-testid="stFileUploader"] {
-        margin-bottom: .8rem;
+        margin-bottom: .45rem;
     }
 
     /* Inputs */

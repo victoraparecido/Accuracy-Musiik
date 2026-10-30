@@ -25,18 +25,20 @@ if not st.session_state.site_started:
     st.markdown("""
     <style>
         .stApp {
-            background: linear-gradient(135deg, #3b087a 0%, #5b16a8 52%, #26004f 100%);
+            background:
+                radial-gradient(ellipse at 50% 28%, rgba(145, 76, 220, .32), transparent 43%),
+                linear-gradient(135deg, #2b0756 0%, #54118d 52%, #1d0339 100%);
             color: #ffffff;
         }
         #MainMenu, footer, header { visibility: hidden; }
         [data-testid="stSidebar"] { display: none; }
         .block-container {
-            max-width: 920px;
-            padding-top: 7vh;
-            padding-bottom: 2rem;
+            max-width: 960px;
+            padding-top: 4vh;
+            padding-bottom: 1.5rem;
         }
         .splash-wrap {
-            min-height: 65vh;
+            min-height: 60vh;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -45,86 +47,143 @@ if not st.session_state.site_started:
             animation: splash-in .8s ease-out both;
         }
         .splash-art {
-            width: min(300px, 65vw);
-            margin-bottom: 22px;
-            filter: drop-shadow(0 12px 18px rgba(72, 61, 91, .10));
+            width: min(330px, 68vw);
+            margin-bottom: 8px;
+            filter: drop-shadow(0 18px 24px rgba(12, 0, 30, .30));
+            animation: cassette-float 4s ease-in-out infinite;
+        }
+        .splash-eyebrow {
+            display: inline-block;
+            color: #d8baff;
+            font-size: .72rem;
+            font-weight: 750;
+            letter-spacing: .24em;
+            text-transform: uppercase;
+            margin: 0 0 12px;
         }
         .splash-title {
             color: #ffffff;
-            font-size: clamp(2.1rem, 5vw, 3.4rem);
-            font-weight: 800;
-            letter-spacing: -.055em;
-            line-height: 1.05;
-            margin: 0 0 12px;
+            font-size: clamp(2.25rem, 5vw, 3.55rem);
+            font-weight: 850;
+            letter-spacing: -.06em;
+            line-height: 1.02;
+            margin: 0 0 14px;
+            text-shadow: 0 5px 30px rgba(14, 0, 35, .25);
         }
+        .splash-title span { color: #d7b4ff; }
         .splash-subtitle {
-            color: #e6d7ff;
-            font-size: 1.05rem;
-            max-width: 440px;
-            line-height: 1.65;
+            color: #eee3ff;
+            font-size: clamp(.98rem, 2vw, 1.08rem);
+            max-width: 490px;
+            line-height: 1.7;
             margin: 0 auto;
         }
+        .splash-points {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 9px;
+            margin-top: 22px;
+        }
+        .splash-points span {
+            color: #f3eaff;
+            border: 1px solid rgba(224, 195, 255, .27);
+            background: rgba(255, 255, 255, .07);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: .76rem;
+            letter-spacing: .02em;
+        }
         .splash-note {
-            color: #c8a8ff;
-            font-size: .78rem;
-            letter-spacing: .18em;
+            color: #c9a3f7;
+            font-size: .68rem;
+            font-weight: 700;
+            letter-spacing: .22em;
             text-transform: uppercase;
-            margin-top: 26px;
+            margin-top: 24px;
+        }
+        [data-testid="stProgressBar"] { margin-top: 5px; }
+        [data-testid="stProgressBar"] > div > div {
+            background: linear-gradient(90deg, #cba1ff, #f1dfff);
         }
         .stButton > button {
-            width: 100%;
-            border: 1px solid #d4cddd;
-            border-radius: 999px;
-            padding: 13px 24px;
-            background: #d4c9e4;
-            color: #383247;
-            font-size: 1rem;
-            font-weight: 700;
+            width: 100%; border: 1px solid #d4cddd; border-radius: 999px;
+            padding: 13px 24px; background: #d4c9e4; color: #383247;
+            font-size: 1rem; font-weight: 700;
             box-shadow: 0 8px 20px rgba(72, 61, 91, .08);
             transition: transform .2s ease, background .2s ease;
         }
         .stButton > button:hover {
-            background: #c9bbdc;
-            color: #30283f;
-            border-color: #c9bbdc;
+            background: #c9bbdc; color: #30283f; border-color: #c9bbdc;
             transform: translateY(-2px);
         }
         @keyframes splash-in {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(14px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes cassette-float {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-7px) rotate(1deg); }
+        }
         @media (prefers-reduced-motion: reduce) {
-            .splash-wrap { animation: none; }
+            .splash-wrap, .splash-art { animation: none; }
+        }
+        @media (max-width: 600px) {
+            .block-container { padding-top: 2vh; }
+            .splash-wrap { min-height: 57vh; }
+            .splash-art { width: min(290px, 78vw); }
+            .splash-points { gap: 6px; margin-top: 17px; }
         }
     </style>
 
     <div class="splash-wrap">
-      <svg class="splash-art" viewBox="0 0 320 260" role="img" aria-label="Ilustração minimalista de uma fita cassete musical">
-        <ellipse cx="160" cy="224" rx="102" ry="13" fill="#d7d0e2"/>
-        <g transform="rotate(-6 160 128)">
-          <rect x="48" y="48" width="224" height="154" rx="22" fill="#c8b9dc"/>
-          <rect x="58" y="58" width="204" height="134" rx="15" fill="#f3eff7" stroke="#b5a6ca" stroke-width="2"/>
-          <rect x="74" y="73" width="172" height="56" rx="9" fill="#e4ddeb"/>
-          <path d="M88 101h13l8-15 12 28 12-20 9 7h17l8-12 10 18 9-6h25" fill="none" stroke="#9c8bb8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="112" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
-          <circle cx="208" cy="153" r="24" fill="#c7b7d8" stroke="#9c8bb8" stroke-width="3"/>
-          <circle cx="112" cy="153" r="8" fill="#f3eff7"/>
-          <circle cx="208" cy="153" r="8" fill="#f3eff7"/>
-          <rect x="139" y="139" width="42" height="27" rx="5" fill="#e4ddeb" stroke="#b5a6ca" stroke-width="2"/>
-          <path d="M146 145v15m8-15v15m8-15v15m8-15v15" stroke="#b5a6ca" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="72" cy="72" r="3" fill="#b5a6ca"/>
-          <circle cx="248" cy="72" r="3" fill="#b5a6ca"/>
-          <circle cx="72" cy="178" r="3" fill="#b5a6ca"/>
-          <circle cx="248" cy="178" r="3" fill="#b5a6ca"/>
+      <svg class="splash-art" viewBox="0 0 360 280" role="img" aria-label="Fita cassete retrô detalhada com rolos, fita magnética e detalhes musicais">
+        <defs>
+          <linearGradient id="cassetteBody" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8b35d1"/><stop offset=".55" stop-color="#6920ad"/><stop offset="1" stop-color="#451078"/></linearGradient>
+          <linearGradient id="cassetteLabel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5c2789"/><stop offset="1" stop-color="#32104f"/></linearGradient>
+          <linearGradient id="reel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7eaff"/><stop offset="1" stop-color="#b69bd4"/></linearGradient>
+        </defs>
+        <ellipse cx="180" cy="244" rx="112" ry="14" fill="#130323" opacity=".35"/>
+        <g transform="rotate(-5 180 137)">
+          <rect x="48" y="51" width="264" height="166" rx="20" fill="#2b0647" opacity=".9"/>
+          <rect x="43" y="43" width="264" height="166" rx="20" fill="url(#cassetteBody)" stroke="#c18af0" stroke-width="2"/>
+          <rect x="53" y="53" width="244" height="146" rx="14" fill="none" stroke="#a35cdd" stroke-width="1.5"/>
+          <circle cx="66" cy="66" r="4" fill="#8b6aa9"/><circle cx="284" cy="66" r="4" fill="#8b6aa9"/>
+          <circle cx="66" cy="186" r="4" fill="#8b6aa9"/><circle cx="284" cy="186" r="4" fill="#8b6aa9"/>
+          <rect x="73" y="64" width="204" height="52" rx="7" fill="url(#cassetteLabel)"/>
+          <path d="M84 102h18l8-15 11 23 12-17 9 7h17l8-12 11 18 10-7h18l8-13 11 16h18" fill="none" stroke="#d9b5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="175" y="78" fill="#f5eaff" font-size="7" text-anchor="middle" letter-spacing="2.5">SIDE A • STEREO</text>
+          <circle cx="111" cy="151" r="30" fill="#7d5b9d" opacity=".22"/>
+          <circle cx="111" cy="147" r="27" fill="url(#reel)" stroke="#8765a8" stroke-width="2.5"/>
+          <circle cx="111" cy="147" r="19" fill="none" stroke="#9b7bb8" stroke-width="2" stroke-dasharray="3 3"/>
+          <circle cx="111" cy="147" r="8" fill="#6a428a" stroke="#f4eaff" stroke-width="2"/>
+          <path d="M111 128v11m0 16v11m-19-19h11m16 0h11" stroke="#9b7bb8" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="239" cy="147" r="27" fill="url(#reel)" stroke="#8765a8" stroke-width="2.5"/>
+          <circle cx="239" cy="147" r="19" fill="none" stroke="#9b7bb8" stroke-width="2" stroke-dasharray="3 3"/>
+          <circle cx="239" cy="147" r="8" fill="#6a428a" stroke="#f4eaff" stroke-width="2"/>
+          <path d="M239 128v11m0 16v11m-19-19h11m16 0h11" stroke="#9b7bb8" stroke-width="3" stroke-linecap="round"/>
+          <path d="M138 142q18-12 36 0t36 0v17q-18 12-36 0t-36 0z" fill="#4a246b" stroke="#8c69aa" stroke-width="1.5"/>
+          <path d="M142 147q14-8 28 0t28 0" fill="none" stroke="#d5b3f6" stroke-width="2"/>
+          <rect x="82" y="177" width="196" height="12" rx="4" fill="#b59bcf" opacity=".75"/>
+          <rect x="151" y="177" width="58" height="12" rx="3" fill="#f6edff" stroke="#a98bc6" stroke-width="1"/>
+          <path d="M159 180v6m7-6v6m7-6v6m7-6v6m7-6v6m7-6v6" stroke="#a98bc6" stroke-width="1.5"/>
+          <path d="M91 124h16m-8-8v16M244 124h16m-8-8v16" stroke="#9e7cbd" stroke-width="1.5" opacity=".8"/>
         </g>
-        <g fill="#a99ac0">
-          <path d="M55 39v-14l17-4v14a6 6 0 1 1-4-5V17l-9 2v16a6 6 0 1 1-4-5z"/>
-          <path d="M258 41v-12l14-3v12a5 5 0 1 1-4-4V24l-6 1v12a5 5 0 1 1-4-4z"/>
+        <g fill="#e4caff" stroke="#e4caff" stroke-linejoin="round">
+          <path d="M53 40V20l19-5v19a7 7 0 1 1-4-6V21l-10 3v17a7 7 0 1 1-5-1z" stroke="none"/>
+          <path d="M298 56V40l15-4v16a6 6 0 1 1-4-5V42l-7 2v14a6 6 0 1 1-4-2z" stroke="none"/>
         </g>
+        <circle cx="315" cy="105" r="3" fill="#c89aff"/><circle cx="38" cy="125" r="2.5" fill="#c89aff"/><path d="M315 126v12m-6-6h12" stroke="#c89aff" stroke-width="2" stroke-linecap="round"/>
       </svg>
-      <div class="splash-title">Accuracy Musiik</div>
-      <p class="splash-subtitle">Explore o som, descubra padrões e conheça o potencial da sua música.</p>
-      <div class="splash-note">Music · Data · Discovery</div>
+      <div class="splash-eyebrow">Music · Data · Discovery</div>
+      <div class="splash-title">Accuracy <span>Musiik</span></div>
+      <p class="splash-subtitle">Explore o som por trás dos números. Descubra padrões musicais e conheça o potencial da sua faixa.</p>
+      <div class="splash-points">
+        <span>♫ Análise musical</span>
+        <span>◈ Dados e padrões</span>
+        <span>↗ Potencial da faixa</span>
+      </div>
+      <div class="splash-note">Uma nova forma de ouvir os dados</div>
     </div>
     """, unsafe_allow_html=True)
 

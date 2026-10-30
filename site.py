@@ -42,6 +42,7 @@ if not st.session_state.site_started:
             align-items: center;
             justify-content: center;
             text-align: center;
+            animation: splash-in .8s ease-out both;
         }
         .splash-art {
             width: min(300px, 65vw);
@@ -87,6 +88,13 @@ if not st.session_state.site_started:
             color: #30283f;
             border-color: #c9bbdc;
             transform: translateY(-2px);
+        }
+        @keyframes splash-in {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .splash-wrap { animation: none; }
         }
     </style>
 
@@ -138,7 +146,7 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
-    /* Tipografia: personalidade underground nos títulos, leitura confortável no corpo */
+    /* Tipografia: títulos marcantes, textos confortáveis de ler */
     html, body, [class*="st-"] {
         font-family: 'Inter', 'Segoe UI', sans-serif !important;
     }
@@ -148,6 +156,7 @@ st.markdown("""
         letter-spacing: .015em !important;
     }
     h1 { text-transform: uppercase; letter-spacing: .025em !important; }
+
 
     /* Fundo geral */
     .stApp {
@@ -267,16 +276,6 @@ st.markdown("""
     }
 
 
-    /* Janela principal do site, com fundo sólido e sem animações decorativas. */
-    div[data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(145deg, rgba(48, 5, 83, .98), rgba(27, 0, 49, .98));
-        border: 1px solid rgba(210, 151, 255, .38) !important;
-        border-radius: 24px !important;
-        padding: 1.6rem 1.8rem !important;
-        box-shadow: 0 12px 42px rgba(8, 0, 20, .32), inset 0 0 28px rgba(164, 76, 255, .10);
-    }
-    .stApp { background: radial-gradient(ellipse at top, #3d0870 0%, #1b0035 68%, #120022 100%); }
-
     .footer {
         text-align: center;
         margin-top: 50px;
@@ -288,450 +287,461 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# ============================================================
+# LOGO
+# ============================================================
+
+st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</strong></div>', unsafe_allow_html=True)
+
+# ============================================================
+# HERO
+# ============================================================
+
+st.title("Sua música. Novas possibilidades.")
+st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
-with st.container(border=True):
 
-    st.subheader("🎧 Vamos conhecer sua faixa")
-    st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
-    st.divider()
+st.subheader("🎧 Vamos conhecer sua faixa")
+st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
+st.divider()
 
-    # ============================================================
-    # PRIMEIRA LINHA
-    # ============================================================
+# ============================================================
+# PRIMEIRA LINHA
+# ============================================================
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-    with col1:
-        bpm = st.number_input(
-            "BPM",
-            min_value=40,
-            max_value=250,
-            value=120,
-            step=1,
-            help="Batidas por minuto da música."
-        )
+with col1:
+    bpm = st.number_input(
+        "BPM",
+        min_value=40,
+        max_value=250,
+        value=120,
+        step=1,
+        help="Batidas por minuto da música."
+    )
 
-    with col2:
-        genero = st.selectbox(
-            "Gênero musical",
-            [
-                # ROCK
-                "Rock",
-                "Rock Alternativo",
-                "Hard Rock",
-                "Punk Rock",
-                "Indie Rock",
-                "Pop Rock",
-                "Grunge",
-                "Rock Psicodélico",
-
-                # POP
-                "Pop",
-                "Synthpop",
-                "Electropop",
-                "Dance Pop",
-                "Indie Pop",
-                "K-Pop",
-                "J-Pop",
-                "Pop Latino",
-
-                # HIP-HOP / RAP
-                "Hip-Hop",
-                "Rap",
-                "Trap",
-                "Drill",
-                "Boom Bap",
-                "Gangsta Rap",
-                "Conscious Rap",
-                "Lo-fi Hip-Hop",
-
-                # ELETRÔNICA
-                "Eletrônica",
-                "House",
-                "Deep House",
-                "Tech House",
-                "Techno",
-                "Trance",
-                "Dubstep",
-                "Drum & Bass",
-                "EDM",
-                "Future Bass",
-
-                # JAZZ
-                "Jazz",
-                "Bebop",
-                "Swing",
-                "Smooth Jazz",
-                "Jazz Fusion",
-                "Free Jazz",
-
-                # CLÁSSICA
-                "Música Clássica",
-                "Barroco",
-                "Romântica",
-                "Ópera",
-                "Sinfônica",
-
-                # BLUES
-                "Blues",
-                "Delta Blues",
-                "Chicago Blues",
-                "Electric Blues",
-                "Blues Rock",
-
-                # COUNTRY
-                "Country",
-                "Country Pop",
-                "Bluegrass",
-                "Outlaw Country",
-                "Country Rock",
-
-                # LATIN
-                "Latin",
-                "Reggaeton",
-                "Salsa",
-                "Bachata",
-                "Merengue",
-                "Latin Pop",
-
-                # MÚSICA BRASILEIRA
-                "Música Brasileira",
-                "MPB",
-                "Sertanejo",
-                "Funk Brasileiro",
-                "Pagode",
-                "Samba",
-                "Forró",
-                "Bossa Nova",
-                "Axé",
-
-                # R&B / SOUL
-                "R&B",
-                "Contemporary R&B",
-                "Neo Soul",
-                "Soul",
-                "Funk Soul",
-                "Motown",
-
-                # REGGAE
-                "Reggae",
-                "Dancehall",
-                "Dub",
-                "Ska",
-
-                # METAL
-                "Metal",
-                "Heavy Metal",
-                "Thrash Metal",
-                "Death Metal",
-                "Black Metal",
-                "Metalcore",
-
-                # FOLK
-                "Folk",
-                "Indie Folk",
-                "Folk Rock",
-                "Acoustic Folk",
-                "Contemporary Folk",
-
-                # GOSPEL
-                "Gospel",
-                "Contemporary Gospel",
-                "Gospel Rock",
-                "Gospel R&B",
-
-                # OUTROS
-                "Outro"
-            ]
-        )
-
-    with col3:
-        streaming = st.selectbox(
-            "Streaming usado",
-            [
-                "Spotify",
-                "YouTube Music",
-                "Apple Music",
-                "Amazon Music",
-                "Deezer",
-                "SoundCloud",
-                "Outro"
-            ]
-        )
-
-    # ============================================================
-    # DURAÇÃO
-    # ============================================================
-
-    st.subheader("⏱️ Tempo de reprodução")
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        minutos = st.number_input(
-            "Minutos",
-            min_value=0,
-            max_value=20,
-            value=3,
-            step=1
-        )
-
-    with col2:
-        segundos = st.number_input(
-            "Segundos",
-            min_value=0,
-            max_value=59,
-            value=30,
-            step=1
-        )
-
-    duracao_segundos = (minutos * 60) + segundos
-
-    # ============================================================
-    # INSTRUMENTOS
-    # ============================================================
-
-    st.subheader("🎸 Elementos sonoros")
-    st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
-    st.divider()
-
-    instrumentos = st.multiselect(
-        "Instrumentos utilizados",
+with col2:
+    genero = st.selectbox(
+        "Gênero musical",
         [
-            "Piano",
-            "Violão",
-            "Guitarra",
-            "Baixo",
-            "Bateria",
-            "Violino",
-            "Saxofone",
-            "Trompete",
-            "Sintetizador",
-            "Voz",
-            "Ukulele",
-            "Percussão",
+            # ROCK
+            "Rock",
+            "Rock Alternativo",
+            "Hard Rock",
+            "Punk Rock",
+            "Indie Rock",
+            "Pop Rock",
+            "Grunge",
+            "Rock Psicodélico",
+
+            # POP
+            "Pop",
+            "Synthpop",
+            "Electropop",
+            "Dance Pop",
+            "Indie Pop",
+            "K-Pop",
+            "J-Pop",
+            "Pop Latino",
+
+            # HIP-HOP / RAP
+            "Hip-Hop",
+            "Rap",
+            "Trap",
+            "Drill",
+            "Boom Bap",
+            "Gangsta Rap",
+            "Conscious Rap",
+            "Lo-fi Hip-Hop",
+
+            # ELETRÔNICA
+            "Eletrônica",
+            "House",
+            "Deep House",
+            "Tech House",
+            "Techno",
+            "Trance",
+            "Dubstep",
+            "Drum & Bass",
+            "EDM",
+            "Future Bass",
+
+            # JAZZ
+            "Jazz",
+            "Bebop",
+            "Swing",
+            "Smooth Jazz",
+            "Jazz Fusion",
+            "Free Jazz",
+
+            # CLÁSSICA
+            "Música Clássica",
+            "Barroco",
+            "Romântica",
+            "Ópera",
+            "Sinfônica",
+
+            # BLUES
+            "Blues",
+            "Delta Blues",
+            "Chicago Blues",
+            "Electric Blues",
+            "Blues Rock",
+
+            # COUNTRY
+            "Country",
+            "Country Pop",
+            "Bluegrass",
+            "Outlaw Country",
+            "Country Rock",
+
+            # LATIN
+            "Latin",
+            "Reggaeton",
+            "Salsa",
+            "Bachata",
+            "Merengue",
+            "Latin Pop",
+
+            # MÚSICA BRASILEIRA
+            "Música Brasileira",
+            "MPB",
+            "Sertanejo",
+            "Funk Brasileiro",
+            "Pagode",
+            "Samba",
+            "Forró",
+            "Bossa Nova",
+            "Axé",
+
+            # R&B / SOUL
+            "R&B",
+            "Contemporary R&B",
+            "Neo Soul",
+            "Soul",
+            "Funk Soul",
+            "Motown",
+
+            # REGGAE
+            "Reggae",
+            "Dancehall",
+            "Dub",
+            "Ska",
+
+            # METAL
+            "Metal",
+            "Heavy Metal",
+            "Thrash Metal",
+            "Death Metal",
+            "Black Metal",
+            "Metalcore",
+
+            # FOLK
+            "Folk",
+            "Indie Folk",
+            "Folk Rock",
+            "Acoustic Folk",
+            "Contemporary Folk",
+
+            # GOSPEL
+            "Gospel",
+            "Contemporary Gospel",
+            "Gospel Rock",
+            "Gospel R&B",
+
+            # OUTROS
             "Outro"
         ]
     )
 
-    # ============================================================
-    # CARACTERÍSTICAS
-    # ============================================================
-
-    st.subheader("🎛️ Detalhes da faixa")
-    st.caption("Conte um pouco mais sobre a produção e as parcerias.")
-    st.divider()
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        acustico = st.radio(
-            "A música é acústica?",
-            ["Sim", "Não"],
-            horizontal=True
-        )
-
-    with col2:
-        feat = st.radio(
-            "Possui feat/parceria?",
-            ["Sim", "Não"],
-            horizontal=True
-        )
-
-    # ============================================================
-    # ARQUIVO DE ÁUDIO
-    # ============================================================
-
-    st.subheader("🎵 Ouça a sua faixa")
-    st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
-    st.divider()
-
-    arquivo_musica = st.file_uploader(
-        "Escolha o arquivo de áudio",
-        type=[
-            "mp3",
-            "wav",
-            "m4a",
-            "flac",
-            "ogg"
-        ],
-        help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+with col3:
+    streaming = st.selectbox(
+        "Streaming usado",
+        [
+            "Spotify",
+            "YouTube Music",
+            "Apple Music",
+            "Amazon Music",
+            "Deezer",
+            "SoundCloud",
+            "Outro"
+        ]
     )
 
+# ============================================================
+# DURAÇÃO
+# ============================================================
+
+st.subheader("⏱️ Tempo de reprodução")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    minutos = st.number_input(
+        "Minutos",
+        min_value=0,
+        max_value=20,
+        value=3,
+        step=1
+    )
+
+with col2:
+    segundos = st.number_input(
+        "Segundos",
+        min_value=0,
+        max_value=59,
+        value=30,
+        step=1
+    )
+
+duracao_segundos = (minutos * 60) + segundos
+
+# ============================================================
+# INSTRUMENTOS
+# ============================================================
+
+st.subheader("🎸 Elementos sonoros")
+st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
+st.divider()
+
+instrumentos = st.multiselect(
+    "Instrumentos utilizados",
+    [
+        "Piano",
+        "Violão",
+        "Guitarra",
+        "Baixo",
+        "Bateria",
+        "Violino",
+        "Saxofone",
+        "Trompete",
+        "Sintetizador",
+        "Voz",
+        "Ukulele",
+        "Percussão",
+        "Outro"
+    ]
+)
+
+# ============================================================
+# CARACTERÍSTICAS
+# ============================================================
+
+st.subheader("🎛️ Detalhes da faixa")
+st.caption("Conte um pouco mais sobre a produção e as parcerias.")
+st.divider()
+
+col1, col2 = st.columns(2)
+
+with col1:
+    acustico = st.radio(
+        "A música é acústica?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+with col2:
+    feat = st.radio(
+        "Possui feat/parceria?",
+        ["Sim", "Não"],
+        horizontal=True
+    )
+
+# ============================================================
+# ARQUIVO DE ÁUDIO
+# ============================================================
+
+st.subheader("🎵 Ouça a sua faixa")
+st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
+st.divider()
+
+arquivo_musica = st.file_uploader(
+    "Escolha o arquivo de áudio",
+    type=[
+        "mp3",
+        "wav",
+        "m4a",
+        "flac",
+        "ogg"
+    ],
+    help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+)
+
+if arquivo_musica is not None:
+
+    st.success(
+        f"Arquivo carregado: {arquivo_musica.name}"
+    )
+
+    st.audio(arquivo_musica)
+
+    st.info(
+        "A análise automática do áudio será integrada "
+        "ao modelo de Machine Learning em uma próxima etapa."
+    )
+
+# ============================================================
+# FUNÇÃO DE PREVISÃO
+# ============================================================
+
+def gerar_resultado():
+
+    # --------------------------------------------------------
+    # ATENÇÃO:
+    # Esta função é apenas uma SIMULAÇÃO.
+    # Depois iremos substituir pelo modelo real do TCC.
+    # --------------------------------------------------------
+
+    score = 50
+
+    # BPM
+    if 90 <= bpm <= 140:
+        score += 10
+
+    elif 70 <= bpm <= 160:
+        score += 5
+
+    else:
+        score -= 3
+
+    # Gênero
+    generos_favoraveis = [
+        "Pop",
+        "Hip-Hop",
+        "Rap",
+        "R&B",
+        "Eletrônica",
+        "Funk"
+    ]
+
+    if genero in generos_favoraveis:
+        score += 8
+
+    # Duração
+    if 150 <= duracao_segundos <= 240:
+        score += 8
+
+    elif 120 <= duracao_segundos <= 300:
+        score += 4
+
+    else:
+        score -= 2
+
+    # Instrumentos
+    if len(instrumentos) >= 3:
+        score += 5
+
+    elif len(instrumentos) == 2:
+        score += 3
+
+    # Acústico
+    if acustico == "Sim":
+        score += 2
+
+    # Feat
+    if feat == "Sim":
+        score += 5
+
+    # Arquivo de áudio
     if arquivo_musica is not None:
+        score += 3
 
-        st.success(
-            f"Arquivo carregado: {arquivo_musica.name}"
-        )
+    # Pequena variação aleatória
+    score += random.randint(-5, 5)
 
-        st.audio(arquivo_musica)
+    # Limita entre 0 e 100
+    score = max(0, min(100, score))
 
-        st.info(
-            "A análise automática do áudio será integrada "
-            "ao modelo de Machine Learning em uma próxima etapa."
-        )
-
-    # ============================================================
-    # FUNÇÃO DE PREVISÃO
-    # ============================================================
-
-    def gerar_resultado():
-
-        # --------------------------------------------------------
-        # ATENÇÃO:
-        # Esta função é apenas uma SIMULAÇÃO.
-        # Depois iremos substituir pelo modelo real do TCC.
-        # --------------------------------------------------------
-
-        score = 50
-
-        # BPM
-        if 90 <= bpm <= 140:
-            score += 10
-
-        elif 70 <= bpm <= 160:
-            score += 5
-
-        else:
-            score -= 3
-
-        # Gênero
-        generos_favoraveis = [
-            "Pop",
-            "Hip-Hop",
-            "Rap",
-            "R&B",
-            "Eletrônica",
-            "Funk"
-        ]
-
-        if genero in generos_favoraveis:
-            score += 8
-
-        # Duração
-        if 150 <= duracao_segundos <= 240:
-            score += 8
-
-        elif 120 <= duracao_segundos <= 300:
-            score += 4
-
-        else:
-            score -= 2
-
-        # Instrumentos
-        if len(instrumentos) >= 3:
-            score += 5
-
-        elif len(instrumentos) == 2:
-            score += 3
-
-        # Acústico
-        if acustico == "Sim":
-            score += 2
-
-        # Feat
-        if feat == "Sim":
-            score += 5
-
-        # Arquivo de áudio
-        if arquivo_musica is not None:
-            score += 3
-
-        # Pequena variação aleatória
-        score += random.randint(-5, 5)
-
-        # Limita entre 0 e 100
-        score = max(0, min(100, score))
-
-        return score
+    return score
 
 
-    # ============================================================
-    # BOTÃO ANALISAR
-    # ============================================================
+# ============================================================
+# BOTÃO ANALISAR
+# ============================================================
+
+st.write("")
+
+if st.button("🚀 Analisar potencial da faixa"):
+
+    score = gerar_resultado()
+
+    # --------------------------------------------------------
+    # CLASSIFICAÇÃO
+    # --------------------------------------------------------
+
+    if score >= 80:
+        categoria = "🔥 Alto potencial de popularidade"
+
+    elif score >= 60:
+        categoria = "🟢 Bom potencial de popularidade"
+
+    elif score >= 40:
+        categoria = "🟡 Potencial moderado"
+
+    else:
+        categoria = "🔵 Potencial baixo"
+
+    # ========================================================
+    # RESULTADO
+    # ========================================================
+
+    st.subheader("📈 Resultado da análise")
+    st.metric("Potencial de popularidade", f"{score}/100")
+    st.success(categoria)
+
+    # ========================================================
+    # MÉTRICAS
+    # ========================================================
 
     st.write("")
 
-    if st.button("🚀 Analisar potencial da faixa"):
+    col1, col2, col3, col4 = st.columns(4)
 
-        score = gerar_resultado()
+    with col1:
+        st.metric("BPM", bpm)
 
-        # --------------------------------------------------------
-        # CLASSIFICAÇÃO
-        # --------------------------------------------------------
+    with col2:
+        st.metric("Duração", f"{minutos}:{segundos:02d}")
 
-        if score >= 80:
-            categoria = "🔥 Alto potencial de popularidade"
+    with col3:
+        st.metric("Instrumentos", len(instrumentos))
 
-        elif score >= 60:
-            categoria = "🟢 Bom potencial de popularidade"
+    with col4:
+        st.metric("Gênero", genero)
 
-        elif score >= 40:
-            categoria = "🟡 Potencial moderado"
+    # ========================================================
+    # DETALHES
+    # ========================================================
 
-        else:
-            categoria = "🔵 Potencial baixo"
+    st.write("")
 
-        # ========================================================
-        # RESULTADO
-        # ========================================================
+    st.subheader("📊 Detalhes da análise")
 
-        st.subheader("📈 Resultado da análise")
-        st.metric("Potencial de popularidade", f"{score}/100")
-        st.success(categoria)
+    st.write(f"**Gênero:** {genero}")
+    st.write(f"**Streaming:** {streaming}")
+    st.write(f"**BPM:** {bpm}")
+    st.write(f"**Duração:** {minutos}:{segundos:02d}")
+    st.write(
+        f"**Instrumentos:** "
+        f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
+    )
+    st.write(f"**Acústico:** {acustico}")
+    st.write(f"**Feat/parceria:** {feat}")
 
-        # ========================================================
-        # MÉTRICAS
-        # ========================================================
-
-        st.write("")
-
-        col1, col2, col3, col4 = st.columns(4)
-
-        with col1:
-            st.metric("BPM", bpm)
-
-        with col2:
-            st.metric("Duração", f"{minutos}:{segundos:02d}")
-
-        with col3:
-            st.metric("Instrumentos", len(instrumentos))
-
-        with col4:
-            st.metric("Gênero", genero)
-
-        # ========================================================
-        # DETALHES
-        # ========================================================
-
-        st.write("")
-
-        st.subheader("📊 Detalhes da análise")
-
-        st.write(f"**Gênero:** {genero}")
-        st.write(f"**Streaming:** {streaming}")
-        st.write(f"**BPM:** {bpm}")
-        st.write(f"**Duração:** {minutos}:{segundos:02d}")
-        st.write(
-            f"**Instrumentos:** "
-            f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
-        )
-        st.write(f"**Acústico:** {acustico}")
-        st.write(f"**Feat/parceria:** {feat}")
-
-        if arquivo_musica:
-            st.write(f"**Arquivo:** {arquivo_musica.name}")
-        else:
-            st.write("**Arquivo:** Nenhum arquivo enviado")
+    if arquivo_musica:
+        st.write(f"**Arquivo:** {arquivo_musica.name}")
+    else:
+        st.write("**Arquivo:** Nenhum arquivo enviado")
 
 
-    # ============================================================
-    # RODAPÉ
-    # ============================================================
+# ============================================================
+# RODAPÉ
+# ============================================================
 
-    st.divider()
-    st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")
+st.divider()
+st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

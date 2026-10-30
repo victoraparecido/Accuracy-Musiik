@@ -204,53 +204,21 @@ if not st.session_state.site_started:
 st.markdown("""
 <style>
 
-    /* Fundo geral transparente para o vídeo ocupar a janela inteira */
+    /* Fundo original em tons de roxo, sem vídeo */
     .stApp {
-        background: transparent !important;
+        background:
+            radial-gradient(ellipse at 18% 18%, rgba(124, 35, 190, .30), transparent 38%),
+            radial-gradient(ellipse at 82% 72%, rgba(91, 24, 150, .24), transparent 42%),
+            linear-gradient(135deg, #100519 0%, #1b082b 48%, #09030f 100%) !important;
+        background-attachment: fixed !important;
         color: white;
         overflow-x: hidden;
     }
 
-    /* Camada escura fixa para manter textos e campos legíveis */
-    .stApp::before {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: 1;
-        pointer-events: none;
-        background: linear-gradient(
-            135deg,
-            rgba(20, 0, 40, .78),
-            rgba(65, 8, 110, .68),
-            rgba(15, 0, 30, .82)
-        );
-    }
-
-    /* O conteúdo do Streamlit fica acima do vídeo */
     [data-testid="stAppViewContainer"] {
         background: transparent !important;
-        position: relative;
-        z-index: 0;
     }
     [data-testid="stHeader"] { background: transparent !important; }
-    .block-container { position: relative; z-index: 2; }
-
-    /* Vídeo fixo cobrindo a janela inteira, sem bordas ou recorte do container */
-    .video-background {
-        position: fixed !important;
-        inset: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        min-width: 100vw !important;
-        min-height: 100vh !important;
-        max-width: none !important;
-        transform: none !important;
-        border: 0 !important;
-        outline: 0 !important;
-        pointer-events: none;
-        z-index: 0;
-        opacity: .78;
-    }
 
     /* Remove elementos padrão */
     #MainMenu {
@@ -368,21 +336,6 @@ st.markdown("""
     }
 
 </style>
-""", unsafe_allow_html=True)
-
-# ============================================================
-# VÍDEO DE FUNDO
-# O vídeo começa automaticamente aos 10 segundos, sem som e em loop.
-# ============================================================
-
-st.markdown("""
-<iframe
-    class="video-background"
-    src="https://www.youtube.com/embed/PTXA82fJPQE?autoplay=1&mute=1&controls=0&loop=1&playlist=PTXA82fJPQE&playsinline=1&rel=0&modestbranding=1&start=10"
-    title="Vídeo de fundo do Accuracy Musiik"
-    allow="autoplay; encrypted-media; picture-in-picture"
-    referrerpolicy="strict-origin-when-cross-origin">
-</iframe>
 """, unsafe_allow_html=True)
 
 # ============================================================

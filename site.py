@@ -372,7 +372,7 @@ st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</s
 # HERO
 # ============================================================
 
-st.markdown('<h1 class="hero-title">Sua música. Novas possibilidades.</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="hero-title">Sua musica. Novas possibilidades.</h1>', unsafe_allow_html=True)
 st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
 
 # ============================================================

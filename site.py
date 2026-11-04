@@ -1,6 +1,12 @@
 import streamlit as st
 import random
 import time
+import io
+
+try:
+    from mutagen import File as MutagenFile
+except ImportError:
+    MutagenFile = None
 
 # ============================================================
 # CONFIGURAÇÃO DA PÁGINA
@@ -525,32 +531,11 @@ with col3:
 
 # ============================================================
 # DURAÇÃO
+# Será identificada automaticamente a partir do arquivo de áudio.
 # ============================================================
 
-st.subheader("⏱️ Tempo de reprodução")
-st.divider()
-
-col1, col2 = st.columns(2)
-
-with col1:
-    minutos = st.number_input(
-        "Minutos",
-        min_value=0,
-        max_value=20,
-        value=3,
-        step=1
-    )
-
-with col2:
-    segundos = st.number_input(
-        "Segundos",
-        min_value=0,
-        max_value=59,
-        value=30,
-        step=1
-    )
-
-duracao_segundos = (minutos * 60) + segundos
+duracao_segundos = None
+duracao_formatada = "Aguardando arquivo de áudio"
 
 # ============================================================
 # INSTRUMENTOS
@@ -604,11 +589,11 @@ with col2:
     )
 
 # ============================================================
-# ARQUIVO DE ÁUDIO
+# ARQUIVO DE ÁUDIO E DURAÇÃO AUTOMÁTICA
 # ============================================================
 
-st.subheader("🎵 Ouça a sua faixa")
-st.caption("Se quiser, envie um áudio para ouvir aqui. A previsão atual usa os dados preenchidos no formulário.")
+st.subheader("🎵 Envie sua faixa")
+st.caption("Ao adicionar o áudio, a duração será identificada automaticamente.")
 st.divider()
 
 arquivo_musica = st.file_uploader(
@@ -623,18 +608,32 @@ arquivo_musica = st.file_uploader(
     help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
 )
 
+duracao_segundos = None
+duracao_formatada = "Não identificada"
+
 if arquivo_musica is not None:
-
-    st.success(
-        f"Arquivo carregado: {arquivo_musica.name}"
-    )
-
+    st.success(f"Arquivo carregado: {arquivo_musica.name}")
     st.audio(arquivo_musica)
 
-    st.info(
-        "A análise automática do áudio será integrada "
-        "ao modelo de Machine Learning em uma próxima etapa."
-    )
+    if MutagenFile is not None:
+        try:
+            audio_bytes = arquivo_musica.getvalue()
+            audio_info = MutagenFile(io.BytesIO(audio_bytes))
+
+            if audio_info is not None and audio_info.info is not None:
+                duracao_segundos = int(round(audio_info.info.length))
+                minutos_detectados, segundos_detectados = divmod(duracao_segundos, 60)
+                duracao_formatada = f"{minutos_detectados}:{segundos_detectados:02d}"
+                st.metric("⏱️ Duração detectada", duracao_formatada)
+            else:
+                st.warning("Não foi possível identificar a duração deste arquivo.")
+        except Exception:
+            st.warning("Não foi possível ler a duração do áudio. Verifique se o arquivo está válido.")
+    else:
+        st.error(
+            "A leitura automática da duração precisa da biblioteca Mutagen. "
+            "Adicione 'mutagen' ao arquivo requirements.txt do projeto."
+        )
 
 # ============================================================
 # FUNÇÃO DE PREVISÃO
@@ -673,15 +672,14 @@ def gerar_resultado():
     if genero in generos_favoraveis:
         score += 8
 
-    # Duração
-    if 150 <= duracao_segundos <= 240:
-        score += 8
-
-    elif 120 <= duracao_segundos <= 300:
-        score += 4
-
-    else:
-        score -= 2
+    # Duração (somente quando identificada no arquivo enviado)
+    if duracao_segundos is not None:
+        if 150 <= duracao_segundos <= 240:
+            score += 8
+        elif 120 <= duracao_segundos <= 300:
+            score += 4
+        else:
+            score -= 2
 
     # Instrumentos
     if len(instrumentos) >= 3:
@@ -757,7 +755,7 @@ if st.button("🚀 Analisar potencial da faixa"):
         st.metric("BPM", bpm)
 
     with col2:
-        st.metric("Duração", f"{minutos}:{segundos:02d}")
+        st.metric("Duração", duracao_formatada)
 
     with col3:
         st.metric("Instrumentos", len(instrumentos))
@@ -776,7 +774,7 @@ if st.button("🚀 Analisar potencial da faixa"):
     st.write(f"**Gênero:** {genero}")
     st.write(f"**Streaming:** {streaming}")
     st.write(f"**BPM:** {bpm}")
-    st.write(f"**Duração:** {minutos}:{segundos:02d}")
+    st.write(f"**Duração:** {duracao_formatada}")
     st.write(
         f"**Instrumentos:** "
         f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"

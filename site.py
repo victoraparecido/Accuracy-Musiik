@@ -548,20 +548,113 @@ st.divider()
 instrumentos = st.multiselect(
     "Instrumentos utilizados",
     [
-        "Piano",
-        "Violão",
-        "Guitarra",
-        "Baixo",
-        "Bateria",
-        "Violino",
-        "Saxofone",
-        "Trompete",
-        "Sintetizador",
-        "Voz",
-        "Ukulele",
-        "Percussão",
-        "Outro"
-    ]
+        # CORDAS
+        "Cordas — Violão",
+        "Cordas — Guitarra elétrica",
+        "Cordas — Guitarra acústica",
+        "Cordas — Baixo elétrico",
+        "Cordas — Contrabaixo acústico",
+        "Cordas — Ukulele",
+        "Cordas — Harpa",
+        "Cordas — Violino",
+        "Cordas — Viola de arco",
+        "Cordas — Violoncelo",
+        "Cordas — Bandolim",
+        "Cordas — Banjo",
+        "Cordas — Cavaquinho",
+        "Cordas — Harpa celta",
+
+        # TECLAS
+        "Teclas — Piano acústico",
+        "Teclas — Piano elétrico",
+        "Teclas — Teclado",
+        "Teclas — Órgão",
+        "Teclas — Cravo",
+        "Teclas — Rhodes",
+        "Teclas — Wurlitzer",
+        "Teclas — Clavinet",
+
+        # PERCUSSÃO E BATERIA
+        "Percussão — Bateria acústica",
+        "Percussão — Bateria eletrônica",
+        "Percussão — Cajón",
+        "Percussão — Congas",
+        "Percussão — Bongôs",
+        "Percussão — Pandeiro",
+        "Percussão — Tamborim",
+        "Percussão — Atabaque",
+        "Percussão — Tímpanos",
+        "Percussão — Marimba",
+        "Percussão — Xilofone",
+        "Percussão — Vibrafone",
+        "Percussão — Glockenspiel",
+        "Percussão — Triângulo",
+        "Percussão — Agogô",
+        "Percussão — Chocalho / Ganzá",
+        "Percussão — Cowbell",
+
+        # SOPROS
+        "Sopros — Saxofone alto",
+        "Sopros — Saxofone tenor",
+        "Sopros — Saxofone barítono",
+        "Sopros — Trompete",
+        "Sopros — Trombone",
+        "Sopros — Tuba",
+        "Sopros — Flauta transversal",
+        "Sopros — Flauta doce",
+        "Sopros — Clarinete",
+        "Sopros — Oboé",
+        "Sopros — Fagote",
+        "Sopros — Gaita",
+        "Sopros — Harmônica",
+
+        # ELETRÔNICOS E SINTETIZADORES
+        "Eletrônico — Sintetizador",
+        "Eletrônico — Sampler",
+        "Eletrônico — Drum machine",
+        "Eletrônico — Sequenciador",
+        "Eletrônico — Controlador MIDI",
+        "Eletrônico — Theremin",
+        "Eletrônico — Vocoder",
+
+        # VOZ E OUTROS
+        "Voz — Vocal principal",
+        "Voz — Backing vocals",
+        "Voz — Coral",
+        "Voz — Beatbox",
+        "Outros — Instrumento regional",
+        "Outros — Outro instrumento"
+    ],
+    help="As opções estão organizadas por famílias para facilitar a seleção."
+)
+
+# ============================================================
+# PLATAFORMA DE MIXAGEM (OPCIONAL)
+# ============================================================
+
+plataforma_mixagem = st.selectbox(
+    "Plataforma de mixagem (opcional)",
+    [
+        "Não informar",
+        "FL Studio",
+        "Ableton Live",
+        "Logic Pro",
+        "Pro Tools",
+        "Cubase",
+        "Studio One",
+        "REAPER",
+        "GarageBand",
+        "BandLab",
+        "Soundtrap",
+        "Audacity",
+        "Bitwig Studio",
+        "Reason",
+        "Maschine",
+        "Serato Studio",
+        "LMMS",
+        "Outra"
+    ],
+    help="Selecione o programa usado na produção ou mixagem, se desejar."
 )
 
 # ============================================================
@@ -781,6 +874,10 @@ if st.button("🚀 Analisar potencial da faixa"):
     )
     st.write(f"**Acústico:** {acustico}")
     st.write(f"**Feat/parceria:** {feat}")
+    if plataforma_mixagem != "Não informar":
+        st.write(f"**Plataforma de mixagem:** {plataforma_mixagem}")
+    else:
+        st.write("**Plataforma de mixagem:** Não informada")
 
     if arquivo_musica:
         st.write(f"**Arquivo:** {arquivo_musica.name}")

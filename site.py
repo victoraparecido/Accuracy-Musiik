@@ -217,6 +217,16 @@ st.markdown("""
         font-style: normal;
     }
 
+    .section-title {
+        font-family: 'EvilScratch', sans-serif !important;
+        font-weight: normal !important;
+        color: #ffffff !important;
+        letter-spacing: 0 !important;
+        line-height: 1.2 !important;
+        font-size: clamp(1.65rem, 3vw, 2.25rem) !important;
+        margin: 2.4rem 0 .35rem 0 !important;
+    }
+
     .hero-title {
         font-family: 'EvilScratch', sans-serif !important;
         font-weight: normal !important;
@@ -380,7 +390,7 @@ st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
 
-st.subheader("🎧 Vamos conhecer sua faixa")
+st.markdown('<h2 class="section-title">🎧 Vamos conhecer sua faixa</h2>', unsafe_allow_html=True)
 st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
 
 # ============================================================
@@ -561,7 +571,7 @@ duracao_formatada = "Aguardando arquivo de áudio"
 # INSTRUMENTOS
 # ============================================================
 
-st.subheader("🎸 Elementos sonoros")
+st.markdown('<h2 class="section-title">🎸 Elementos sonoros</h2>', unsafe_allow_html=True)
 st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
 
 instrumentos = st.multiselect(
@@ -682,7 +692,7 @@ st.divider()
 # CARACTERÍSTICAS
 # ============================================================
 
-st.subheader("🎛️ Detalhes da faixa")
+st.markdown('<h2 class="section-title">🎛️ Detalhes da faixa</h2>', unsafe_allow_html=True)
 st.caption("Conte um pouco mais sobre a produção e as parcerias.")
 
 col1, col2 = st.columns(2)
@@ -707,7 +717,7 @@ st.divider()
 # ARQUIVO DE ÁUDIO E DURAÇÃO AUTOMÁTICA
 # ============================================================
 
-st.subheader("🎵 Envie sua faixa")
+st.markdown('<h2 class="section-title">🎵 Envie sua faixa</h2>', unsafe_allow_html=True)
 st.caption("Ao adicionar o áudio, a duração será identificada automaticamente.")
 
 arquivo_musica = st.file_uploader(

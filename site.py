@@ -299,10 +299,16 @@ st.markdown("""
         width: 100%;
         max-width: none;
         margin: 0 auto 3.2rem auto;
-        color: #d8c5f2;
+        color: #cbb8e5;
         text-align: center !important;
         font-size: 1.05rem;
         line-height: 1.8;
+    }
+
+    /* Seleção de texto em tom roxo suave, evitando o azul intenso padrão */
+    ::selection {
+        background: rgba(160, 112, 195, .42);
+        color: #f3eaff;
     }
 
     h2, h3 {

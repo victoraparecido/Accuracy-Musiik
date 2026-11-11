@@ -285,10 +285,12 @@ st.markdown("""
     }
 
     .hero-copy {
-        max-width: 680px;
+        display: block;
+        width: 100%;
+        max-width: none;
         margin: 0 auto 3.2rem auto;
         color: #d8c5f2;
-        text-align: center;
+        text-align: center !important;
         font-size: 1.05rem;
         line-height: 1.8;
     }
@@ -371,7 +373,7 @@ st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</s
 # HERO
 # ============================================================
 
-st.markdown('<h1 class="hero-title">Sua música Novas possibilidades </h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="hero-title">Sua música. Novas possibilidades.</h1>', unsafe_allow_html=True)
 st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
 
 # ============================================================

@@ -382,7 +382,6 @@ st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma
 
 st.subheader("🎧 Vamos conhecer sua faixa")
 st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
-st.divider()
 
 # ============================================================
 # PRIMEIRA LINHA
@@ -548,6 +547,8 @@ with col3:
         ]
     )
 
+st.divider()
+
 # ============================================================
 # DURAÇÃO
 # Será identificada automaticamente a partir do arquivo de áudio.
@@ -562,7 +563,6 @@ duracao_formatada = "Aguardando arquivo de áudio"
 
 st.subheader("🎸 Elementos sonoros")
 st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
-st.divider()
 
 instrumentos = st.multiselect(
     "Instrumentos utilizados",
@@ -676,13 +676,14 @@ plataforma_mixagem = st.selectbox(
     help="Selecione o programa usado na produção ou mixagem, se desejar."
 )
 
+st.divider()
+
 # ============================================================
 # CARACTERÍSTICAS
 # ============================================================
 
 st.subheader("🎛️ Detalhes da faixa")
 st.caption("Conte um pouco mais sobre a produção e as parcerias.")
-st.divider()
 
 col1, col2 = st.columns(2)
 
@@ -700,13 +701,14 @@ with col2:
         horizontal=True
     )
 
+st.divider()
+
 # ============================================================
 # ARQUIVO DE ÁUDIO E DURAÇÃO AUTOMÁTICA
 # ============================================================
 
 st.subheader("🎵 Envie sua faixa")
 st.caption("Ao adicionar o áudio, a duração será identificada automaticamente.")
-st.divider()
 
 arquivo_musica = st.file_uploader(
     "Escolha o arquivo de áudio",
@@ -746,6 +748,8 @@ if arquivo_musica is not None:
             "A leitura automática da duração precisa da biblioteca Mutagen. "
             "Adicione 'mutagen' ao arquivo requirements.txt do projeto."
         )
+
+st.divider()
 
 # ============================================================
 # FUNÇÃO DE PREVISÃO

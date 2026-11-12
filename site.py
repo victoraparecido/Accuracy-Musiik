@@ -185,7 +185,7 @@ if not st.session_state.site_started:
     with center:
         progress = st.progress(0, text="Preparando sua experiência musical...")
         for value in range(1, 101):
-            time.sleep(0.04)
+            time.sleep(0.05)
             progress.progress(value, text="Carregando o Accuracy Musiik...")
         st.session_state.site_started = True
         st.rerun()

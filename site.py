@@ -165,8 +165,15 @@ if not st.session_state.site_started:
             margin-top: 24px;
         }
         [data-testid="stProgressBar"] { margin-top: 5px; }
-        [data-testid="stProgressBar"] > div > div {
-            background: linear-gradient(90deg, #cba1ff, #f1dfff);
+        [data-testid="stProgressBar"] [role="progressbar"] {
+            background: rgba(106, 0, 255, .16) !important;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+        [data-testid="stProgressBar"] [role="progressbar"] > div,
+        [data-testid="stProgressBar"] > div > div > div {
+            background: linear-gradient(90deg, #6A00FF, #B56BFF) !important;
+            border-radius: 999px;
         }
         .stButton > button {
             width: 100%; border: 1px solid #d4cddd; border-radius: 999px;

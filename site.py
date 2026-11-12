@@ -253,21 +253,23 @@ st.markdown("""
         visibility: hidden;
     }
 
-    /* Transição suave da abertura para o conteúdo principal */
-    @keyframes site-fade-in {
-        from { opacity: 0; transform: translateY(8px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    .stApp [data-testid="stAppViewContainer"] .block-container {
-        animation: site-fade-in .85s ease-out both;
-    }
-
     /* Espaçamento e hierarquia visual */
     .block-container {
         max-width: 1180px;
         padding-top: 2.8rem;
         padding-bottom: 4rem;
+        animation: main-site-fade-in 1.6s ease-out both;
+    }
+
+    @keyframes main-site-fade-in {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     .brand-mark {

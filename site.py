@@ -260,23 +260,49 @@ st.markdown("""
         visibility: hidden;
     }
 
+    /* Cortina de transição: cobre a troca de tela e revela o menu suavemente. */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        pointer-events: none;
+        background:
+            radial-gradient(ellipse at 50% 45%, rgba(106, 0, 255, .18), transparent 55%),
+            #050407;
+        opacity: 1;
+        animation: splash-curtain-reveal 1.9s cubic-bezier(.76, 0, .24, 1) .08s both;
+    }
+
     /* Espaçamento e hierarquia visual */
     .block-container {
         max-width: 1180px;
         padding-top: 2.8rem;
         padding-bottom: 4rem;
-        animation: main-site-fade-in 1.6s ease-out both;
+        animation: main-site-fade-in 2.15s cubic-bezier(.2, .7, .2, 1) .12s both;
+    }
+
+    @keyframes splash-curtain-reveal {
+        0% { opacity: 1; }
+        100% { opacity: 0; }
     }
 
     @keyframes main-site-fade-in {
-        from {
+        0% {
             opacity: 0;
-            transform: translateY(12px);
+            transform: translateY(18px) scale(.985);
+            filter: blur(5px);
         }
-        to {
+        65% { opacity: 1; filter: blur(1px); }
+        100% {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            filter: blur(0);
         }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .stApp::before, .block-container { animation: none !important; }
     }
 
     .brand-mark {

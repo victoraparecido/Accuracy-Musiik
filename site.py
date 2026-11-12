@@ -153,9 +153,10 @@ if not st.session_state.site_started:
         }
         /* A logo ganha escala no fim da abertura e some antes do menu entrar. */
         @keyframes logo-zoom-exit {
-            0%, 48% { opacity: 1; transform: scale(1); }
-            78% { opacity: 1; transform: scale(1.65); }
-            100% { opacity: 0; transform: scale(2.65); }
+            0%, 42% { opacity: 1; transform: scale(1); }
+            72% { opacity: 1; transform: scale(2.2); }
+            90% { opacity: .92; transform: scale(4.4); }
+            100% { opacity: 0; transform: scale(6.2); }
         }
         @keyframes font-cycle {
             0%, 33.32% { font-family: 'Aerosoldier', sans-serif; }

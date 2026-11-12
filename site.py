@@ -86,13 +86,13 @@ if not st.session_state.site_started:
             margin: 0 0 12px;
         }
         .splash-title {
-            color: #6A00FF; /* Roxo elétrico */
+            color: #6A00FF !important; /* Roxo solicitado */
             font-size: clamp(2.2rem, 5vw, 3.6rem);
             font-weight: 800;
             letter-spacing: .015em;
             line-height: 1.15;
             margin: 0 0 14px;
-            text-shadow: 0 0 10px rgba(160, 32, 240, .72), 0 0 28px rgba(160, 32, 240, .48);
+            text-shadow: 0 0 10px rgba(106, 0, 255, .72), 0 0 28px rgba(106, 0, 255, .48) !important;
             animation: font-cycle 1.5s steps(1, end) infinite;
         }
         .splash-subtitle {

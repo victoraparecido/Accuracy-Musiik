@@ -86,7 +86,7 @@ if not st.session_state.site_started:
             margin: 0 0 12px;
         }
         .splash-title {
-            color: #A020F0; /* Roxo elétrico */
+            color: #6A00FF; /* Roxo elétrico */
             font-size: clamp(2.2rem, 5vw, 3.6rem);
             font-weight: 800;
             letter-spacing: .015em;

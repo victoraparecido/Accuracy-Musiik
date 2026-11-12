@@ -253,6 +253,16 @@ st.markdown("""
         visibility: hidden;
     }
 
+    /* Transição suave da abertura para o conteúdo principal */
+    @keyframes site-fade-in {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stApp [data-testid="stAppViewContainer"] .block-container {
+        animation: site-fade-in .85s ease-out both;
+    }
+
     /* Espaçamento e hierarquia visual */
     .block-container {
         max-width: 1180px;

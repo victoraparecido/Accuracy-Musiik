@@ -68,14 +68,17 @@ if not st.session_state.site_started:
             text-align: center;
             animation: splash-in .8s ease-out both;
         }
-        .splash-logo {
+        .splash-wrap img.splash-logo {
+            display: block;
             width: min(560px, 88vw);
             height: auto;
             object-fit: contain;
             margin-bottom: -24px;
             filter: drop-shadow(0 0 26px rgba(132, 0, 255, .18));
+            transform: scale(1);
             transform-origin: center center;
-            animation: logo-zoom-exit 5s cubic-bezier(.2,.75,.25,1) both;
+            animation: logo-zoom-exit 5s cubic-bezier(.35,.05,.75,.35) both !important;
+            will-change: transform, opacity;
         }
         .splash-eyebrow {
             display: inline-block;
@@ -150,8 +153,9 @@ if not st.session_state.site_started:
         }
         /* A logo ganha escala no fim da abertura e some antes do menu entrar. */
         @keyframes logo-zoom-exit {
-            0%, 78% { opacity: 1; transform: scale(1); }
-            100% { opacity: 0; transform: scale(1.24); }
+            0%, 48% { opacity: 1; transform: scale(1); }
+            78% { opacity: 1; transform: scale(1.65); }
+            100% { opacity: 0; transform: scale(2.65); }
         }
         @keyframes font-cycle {
             0%, 33.32% { font-family: 'Aerosoldier', sans-serif; }
@@ -159,7 +163,7 @@ if not st.session_state.site_started:
             66.66%, 100% { font-family: 'Graffonti3D', sans-serif; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .splash-wrap, .splash-logo, .splash-title { animation: none; }
+            .splash-wrap, .splash-title { animation: none; }
         }
         @media (max-width: 600px) {
             .block-container { padding-top: 2vh; }

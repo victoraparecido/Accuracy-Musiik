@@ -75,10 +75,8 @@ if not st.session_state.site_started:
             object-fit: contain;
             margin-bottom: -24px;
             filter: drop-shadow(0 0 26px rgba(132, 0, 255, .18));
-            transform: scale(1);
+            transform: none;
             transform-origin: center center;
-            animation: logo-zoom-exit 5s cubic-bezier(.35,.05,.75,.35) both !important;
-            will-change: transform, opacity;
         }
         .splash-eyebrow {
             display: inline-block;
@@ -151,13 +149,7 @@ if not st.session_state.site_started:
             from { opacity: 0; transform: translateY(14px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        /* A logo ganha escala no fim da abertura e some antes do menu entrar. */
-        @keyframes logo-zoom-exit {
-            0%, 38% { opacity: 1; transform: scale(1); }
-            66% { opacity: 1; transform: scale(3.2); }
-            86% { opacity: .96; transform: scale(7.5); }
-            100% { opacity: 0; transform: scale(12); }
-        }
+        /* A logo permanece estável: a passagem acontece com um flash cinematográfico. */
         @keyframes font-cycle {
             0%, 33.32% { font-family: 'Aerosoldier', sans-serif; }
             33.33%, 66.65% { font-family: 'DonGraffiti', sans-serif; }
@@ -260,18 +252,24 @@ st.markdown("""
         visibility: hidden;
     }
 
-    /* Cortina de transição: cobre a troca de tela e revela o menu suavemente. */
+    /* Flash cinematográfico: um clarão branco-roxo conecta a abertura ao menu. */
     .stApp::before {
         content: "";
         position: fixed;
         inset: 0;
         z-index: 999999;
         pointer-events: none;
+        opacity: 0;
         background:
-            radial-gradient(ellipse at 50% 45%, rgba(106, 0, 255, .18), transparent 55%),
-            #050407;
-        opacity: 1;
-        animation: splash-curtain-reveal 1.9s cubic-bezier(.76, 0, .24, 1) .08s both;
+            radial-gradient(ellipse at 50% 48%,
+                rgba(255, 255, 255, .98) 0%,
+                rgba(220, 190, 255, .92) 13%,
+                rgba(140, 45, 255, .72) 32%,
+                rgba(48, 10, 82, .42) 58%,
+                rgba(5, 4, 7, 0) 78%);
+        mix-blend-mode: screen;
+        animation: cinematic-flash 1.55s cubic-bezier(.16, .72, .22, 1) both;
+        will-change: opacity, transform;
     }
 
     /* Espaçamento e hierarquia visual */
@@ -282,9 +280,13 @@ st.markdown("""
         animation: main-site-fade-in 2.15s cubic-bezier(.2, .7, .2, 1) .12s both;
     }
 
-    @keyframes splash-curtain-reveal {
-        0% { opacity: 1; }
-        100% { opacity: 0; }
+    @keyframes cinematic-flash {
+        0%   { opacity: 0; transform: scale(.72); }
+        12%  { opacity: 1; transform: scale(.94); }
+        25%  { opacity: .88; transform: scale(1.08); }
+        43%  { opacity: .42; transform: scale(1.22); }
+        68%  { opacity: .12; transform: scale(1.38); }
+        100% { opacity: 0; transform: scale(1.55); }
     }
 
     @keyframes main-site-fade-in {
@@ -302,7 +304,7 @@ st.markdown("""
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .stApp::before, .block-container { animation: none !important; }
+        .stApp::before, .block-container, .splash-logo { animation: none !important; }
     }
 
     .brand-mark {

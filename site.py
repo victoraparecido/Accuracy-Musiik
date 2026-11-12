@@ -252,24 +252,34 @@ st.markdown("""
         visibility: hidden;
     }
 
-    /* Flash cinematográfico: um clarão branco-roxo conecta a abertura ao menu. */
-    .stApp::before {
+    /* Glitch cinematográfico: cortes digitais rápidos em roxo e magenta. */
+    .stApp::before,
+    .stApp::after {
         content: "";
         position: fixed;
         inset: 0;
         z-index: 999999;
         pointer-events: none;
         opacity: 0;
+        will-change: opacity, transform, clip-path;
+    }
+    .stApp::before {
         background:
-            radial-gradient(ellipse at 50% 48%,
-                rgba(255, 255, 255, .98) 0%,
-                rgba(220, 190, 255, .92) 13%,
-                rgba(140, 45, 255, .72) 32%,
-                rgba(48, 10, 82, .42) 58%,
-                rgba(5, 4, 7, 0) 78%);
+            linear-gradient(90deg, transparent 0 8%, rgba(106, 0, 255, .48) 8.2% 8.8%, transparent 9% 100%),
+            repeating-linear-gradient(0deg, transparent 0 9px, rgba(190, 130, 255, .20) 10px 11px, transparent 12px 21px),
+            linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, .20) 18.2% 18.6%, transparent 19% 100%);
         mix-blend-mode: screen;
-        animation: cinematic-flash 1.55s cubic-bezier(.16, .72, .22, 1) both;
-        will-change: opacity, transform;
+        animation: glitch-slices 1.2s steps(1, end) both;
+    }
+    .stApp::after {
+        background: linear-gradient(90deg,
+            rgba(106, 0, 255, .0) 0%,
+            rgba(106, 0, 255, .18) 28%,
+            rgba(255, 255, 255, .12) 50%,
+            rgba(190, 0, 255, .20) 72%,
+            rgba(106, 0, 255, .0) 100%);
+        mix-blend-mode: screen;
+        animation: glitch-scan 1.2s steps(1, end) both;
     }
 
     /* Espaçamento e hierarquia visual */
@@ -280,13 +290,27 @@ st.markdown("""
         animation: main-site-fade-in 2.15s cubic-bezier(.2, .7, .2, 1) .12s both;
     }
 
-    @keyframes cinematic-flash {
-        0%   { opacity: 0; transform: scale(.72); }
-        12%  { opacity: 1; transform: scale(.94); }
-        25%  { opacity: .88; transform: scale(1.08); }
-        43%  { opacity: .42; transform: scale(1.22); }
-        68%  { opacity: .12; transform: scale(1.38); }
-        100% { opacity: 0; transform: scale(1.55); }
+    @keyframes glitch-slices {
+        0%, 100% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
+        9%  { opacity: .9; transform: translateX(-7px); clip-path: inset(12% 0 76% 0); }
+        13% { opacity: .55; transform: translateX(8px); clip-path: inset(42% 0 49% 0); }
+        18% { opacity: .85; transform: translateX(-3px); clip-path: inset(71% 0 18% 0); }
+        24% { opacity: .28; transform: translateX(5px); clip-path: inset(27% 0 66% 0); }
+        31% { opacity: .72; transform: translateX(-10px); clip-path: inset(53% 0 34% 0); }
+        38% { opacity: .18; transform: translateX(3px); clip-path: inset(5% 0 87% 0); }
+        48% { opacity: .48; transform: translateX(-4px); clip-path: inset(83% 0 8% 0); }
+        61% { opacity: .12; transform: translateX(2px); clip-path: inset(35% 0 58% 0); }
+        100% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
+    }
+    @keyframes glitch-scan {
+        0%, 100% { opacity: 0; transform: translateX(0); }
+        11% { opacity: .35; transform: translateX(12px); }
+        16% { opacity: .08; transform: translateX(-15px); }
+        29% { opacity: .42; transform: translateX(7px); }
+        34% { opacity: .12; transform: translateX(-5px); }
+        47% { opacity: .30; transform: translateX(10px); }
+        56% { opacity: .05; transform: translateX(-8px); }
+        68% { opacity: .16; transform: translateX(3px); }
     }
 
     @keyframes main-site-fade-in {
@@ -304,7 +328,7 @@ st.markdown("""
     }
 
     @media (prefers-reduced-motion: reduce) {
-        .stApp::before, .block-container, .splash-logo { animation: none !important; }
+        .stApp::before, .stApp::after, .block-container, .splash-logo { animation: none !important; }
     }
 
     .brand-mark {

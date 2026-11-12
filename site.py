@@ -74,7 +74,8 @@ if not st.session_state.site_started:
             object-fit: contain;
             margin-bottom: -24px;
             filter: drop-shadow(0 0 26px rgba(132, 0, 255, .18));
-            animation: logo-glow 3s ease-in-out infinite;
+            transform-origin: center center;
+            animation: logo-zoom-exit 5s cubic-bezier(.2,.75,.25,1) both;
         }
         .splash-eyebrow {
             display: inline-block;
@@ -147,9 +148,10 @@ if not st.session_state.site_started:
             from { opacity: 0; transform: translateY(14px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes logo-glow {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        /* A logo ganha escala no fim da abertura e some antes do menu entrar. */
+        @keyframes logo-zoom-exit {
+            0%, 78% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.24); }
         }
         @keyframes font-cycle {
             0%, 33.32% { font-family: 'Aerosoldier', sans-serif; }

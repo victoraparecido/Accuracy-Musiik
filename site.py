@@ -205,7 +205,51 @@ if not st.session_state.site_started:
             .splash-logo { width: min(480px, 92vw); margin-bottom: -14px; }
             .splash-points { gap: 6px; margin-top: 17px; }
         }
-    </style>
+    
+
+    /* ACCURACY MUSIIK — dashboard layer */
+    .stApp {
+        background: radial-gradient(ellipse at 12% 8%, rgba(106,0,255,.18), transparent 34%),
+                    radial-gradient(ellipse at 88% 58%, rgba(106,0,255,.10), transparent 38%),
+                    linear-gradient(145deg, #08080b 0%, #101014 52%, #09090c 100%) !important;
+        color: #f4f1fa !important;
+    }
+    .block-container { max-width: 1260px !important; padding-top: 2.2rem !important; }
+    .brand-mark { color: #cfc4e8 !important; margin-bottom: 1.25rem !important; font-size: 1.15rem !important; }
+    .brand-mark strong { color: #a879ff !important; }
+    .dashboard-eyebrow { text-align:center; color:#a879ff; font: 700 .72rem/1.5 sans-serif; letter-spacing:.22em; margin: .35rem 0 1rem; }
+    .dashboard-eyebrow span { color:#5e526e; padding:0 .55rem; }
+    .hero-title { font-size:clamp(2.6rem,6vw,5.2rem) !important; text-align:center !important; letter-spacing:-.035em !important; margin-bottom:.8rem !important; }
+    .hero-title span { color:#9a58ff; text-shadow:0 0 34px rgba(106,0,255,.22); }
+    .hero-copy { max-width:690px !important; color:#96919f !important; font-size:1rem !important; margin-bottom:2.3rem !important; }
+    .dashboard-overview { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin:0 0 2.2rem; }
+    .overview-card { background:linear-gradient(145deg,rgba(24,24,30,.94),rgba(15,15,19,.96)); border:1px solid #29262f; border-radius:16px; padding:20px 22px; min-height:138px; box-shadow:0 12px 30px rgba(0,0,0,.14); transition:transform .22s ease,border-color .22s ease; }
+    .overview-card:hover { transform:translateY(-3px); border-color:#51406e; }
+    .overview-card-accent { border-color:rgba(106,0,255,.42); background:linear-gradient(145deg,rgba(32,20,48,.96),rgba(16,15,21,.98)); }
+    .overview-icon { color:#a879ff; font-size:1.35rem; margin-bottom:12px; }
+    .overview-label { color:#7f788b; font:700 .62rem/1.4 sans-serif; letter-spacing:.16em; margin-bottom:6px; }
+    .overview-title { color:#f3effa; font:600 1rem/1.4 sans-serif; margin-bottom:4px; }
+    .overview-desc { color:#898491; font:400 .78rem/1.5 sans-serif; }
+    .dashboard-section-label { display:flex; align-items:center; gap:10px; color:#a879ff; font:700 .67rem/1.4 sans-serif; letter-spacing:.17em; margin:0 0 .5rem; }
+    .section-dot { width:7px; height:7px; border-radius:50%; background:#8d45ff; box-shadow:0 0 12px #6a00ff; }
+    .section-label-line { flex:1; height:1px; background:linear-gradient(90deg,#30243e,transparent); }
+    .section-label-muted { color:#625c6b; font-weight:500; letter-spacing:.1em; }
+    .section-title { color:#f4f1fa !important; font-size:clamp(1.4rem,2.4vw,1.9rem) !important; margin-top:1.65rem !important; }
+    h2,h3 { color:#f4f1fa !important; }
+    [data-testid="stCaptionContainer"] { color:#918b9a !important; }
+    [data-testid="stDivider"] { border-color:#28252e !important; opacity:.8 !important; }
+    [data-testid="stNumberInput"], [data-testid="stSelectbox"], [data-testid="stMultiSelect"], [data-testid="stRadio"] { background:rgba(20,20,25,.42); border-radius:12px; }
+    [data-testid="stWidgetLabel"] p, .stSelectbox label, .stNumberInput label, .stMultiSelect label, .stRadio label, .stFileUploader label { color:#d5cfdf !important; }
+    [data-baseweb="input"], [data-baseweb="select"] > div, [data-testid="stFileUploader"] section { background:#15151b !important; border-color:#302d38 !important; border-radius:10px !important; }
+    [data-baseweb="input"] input, [data-baseweb="select"] div { color:#eee9f7 !important; }
+    [data-testid="stMetric"] { background:linear-gradient(145deg,#19171f,#111116); border:1px solid #2b2634; border-radius:14px; padding:15px 17px; }
+    [data-testid="stMetricLabel"] { color:#9991a7 !important; }
+    [data-testid="stMetricValue"] { color:#b58aff !important; }
+    .stButton > button { background:linear-gradient(100deg,#6a00ff,#8c42ff) !important; border:1px solid rgba(185,145,255,.2) !important; border-radius:12px !important; box-shadow:0 7px 24px rgba(106,0,255,.16); }
+    .stButton > button:hover { box-shadow:0 9px 28px rgba(106,0,255,.32) !important; }
+    [data-testid="stAlert"] { border-radius:12px !important; }
+    @media (max-width:760px) { .dashboard-overview { grid-template-columns:1fr; } .overview-card { min-height:unset; } .section-label-muted { display:none; } }
+</style>
 
     <div class="splash-wrap">
       <div class="music-notes-wallpaper" aria-hidden="true">
@@ -506,8 +550,17 @@ st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</s
 # HERO
 # ============================================================
 
-st.markdown('<h1 class="hero-title">Sua música Novas possibilidades</h1>', unsafe_allow_html=True)
-st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
+st.markdown('<div class="dashboard-eyebrow">PAINEL DE ANÁLISE <span>///</span> MUSIC DATA LAB</div><h1 class="hero-title">Dados que revelam<br><span>o som.</span></h1>', unsafe_allow_html=True)
+st.markdown('<p class="hero-copy">Explore as características da sua faixa e descubra uma estimativa do seu potencial de popularidade com ciência de dados.</p>', unsafe_allow_html=True)
+
+st.markdown("""
+<div class="dashboard-overview">
+  <div class="overview-card"><div class="overview-icon">◈</div><div class="overview-label">ANÁLISE MUSICAL</div><div class="overview-title">Características da faixa</div><div class="overview-desc">Ritmo, gênero e elementos sonoros</div></div>
+  <div class="overview-card overview-card-accent"><div class="overview-icon">⌁</div><div class="overview-label">DATA INTELLIGENCE</div><div class="overview-title">Padrões e dados</div><div class="overview-desc">Informações organizadas para análise</div></div>
+  <div class="overview-card"><div class="overview-icon">↗</div><div class="overview-label">POPULARITY ESTIMATE</div><div class="overview-title">Potencial da música</div><div class="overview-desc">Estimativa em escala de 0 a 100</div></div>
+</div>
+<div class="dashboard-section-label"><span class="section-dot"></span> WORKSPACE <span class="section-label-line"></span><span class="section-label-muted">INPUT / TRACK PROFILE</span></div>
+""", unsafe_allow_html=True)
 
 # ============================================================
 # INFORMAÇÕES DA MÚSICA

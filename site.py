@@ -420,6 +420,124 @@ div[data-testid="stHorizontalBlock"] { gap: 1.15rem; }
 @media (prefers-reduced-motion: reduce) {
     .block-container { animation: none !important; }
 }
+
+/* ACURRACY MUSIIK — VISUAL EDITORIAL / UNDERGROUND */
+.block-container {
+    max-width: 1440px !important;
+    padding-left: clamp(1rem, 4vw, 3.5rem) !important;
+    padding-right: clamp(1rem, 4vw, 3.5rem) !important;
+}
+.brand-mark {
+    text-transform: uppercase;
+    letter-spacing: .16em !important;
+    font-size: .78rem !important;
+    color: #A98BDA !important;
+}
+.brand-mark span:first-child {
+    display: inline-flex;
+    width: 30px; height: 30px;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(166, 105, 255, .48);
+    border-radius: 8px;
+    background: rgba(106, 0, 255, .13);
+    color: #B98BFF;
+    font-size: 1.1rem;
+}
+.dashboard-hero {
+    min-height: 310px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 8px !important;
+    border-left: 4px solid #6A00FF !important;
+    background:
+        linear-gradient(90deg, rgba(10, 7, 15, .98) 0%, rgba(22, 11, 36, .88) 60%, rgba(10, 7, 15, .75) 100%),
+        repeating-linear-gradient(135deg, transparent 0 22px, rgba(106,0,255,.04) 22px 23px) !important;
+    box-shadow: 0 22px 60px rgba(0,0,0,.34), inset 0 0 0 1px rgba(165,105,255,.13) !important;
+}
+.dashboard-hero::before {
+    content: "AM / 001";
+    position: absolute;
+    right: 1.5rem; bottom: 1.25rem;
+    color: rgba(190, 160, 255, .40);
+    font: 700 .68rem/1 monospace;
+    letter-spacing: .18em;
+}
+.dashboard-hero::after {
+    width: 360px !important; height: 360px !important;
+    right: -100px !important; top: -110px !important;
+    background: rgba(106, 0, 255, .25) !important;
+    filter: blur(72px) !important;
+}
+.hero-eyebrow {
+    border: 1px solid rgba(170, 118, 255, .28);
+    background: rgba(106, 0, 255, .10);
+    padding: .4rem .65rem;
+    border-radius: 3px;
+    letter-spacing: .24em !important;
+}
+.dashboard-hero h1 {
+    font-size: clamp(2.6rem, 7vw, 6.1rem) !important;
+    line-height: .98 !important;
+    text-transform: uppercase;
+    text-shadow: 0 0 34px rgba(106,0,255,.18);
+}
+.dashboard-hero p {
+    border-left: 1px solid rgba(185,139,255,.48);
+    padding-left: .9rem;
+    max-width: 620px !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: 8px !important;
+    border-color: rgba(164,105,255,.20) !important;
+    background: linear-gradient(145deg, rgba(19,14,27,.92), rgba(9,8,13,.94)) !important;
+    box-shadow: 0 14px 38px rgba(0,0,0,.23), inset 0 1px 0 rgba(255,255,255,.025) !important;
+    padding: .8rem .8rem !important;
+}
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .035em !important;
+}
+.section-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px; height: 1.35em;
+    flex: 0 0 4px;
+    background: linear-gradient(180deg, #B13DFF, #6A00FF);
+    box-shadow: 0 0 14px rgba(106,0,255,.38);
+}
+.stSelectbox label, .stNumberInput label, .stMultiSelect label,
+.stRadio label, .stFileUploader label {
+    letter-spacing: .025em;
+    font-size: .88rem !important;
+}
+[data-baseweb="select"] > div, [data-testid="stNumberInput"] input {
+    border-radius: 6px !important;
+}
+[data-testid="stRadio"] label { border-radius: 6px !important; }
+.stButton > button {
+    border-radius: 6px !important;
+    text-transform: uppercase;
+    letter-spacing: .10em !important;
+    font-size: .84rem !important;
+    min-height: 3.4rem;
+}
+[data-testid="stMetric"] {
+    border-radius: 8px !important;
+    background: linear-gradient(135deg, rgba(25,15,38,.88), rgba(10,8,14,.92)) !important;
+}
+[data-testid="stMetricValue"] {
+    font-family: 'EvilScratch', sans-serif !important;
+    letter-spacing: .02em;
+}
+[data-testid="stFileUploader"] section {
+    border-radius: 8px !important;
+    padding: 1.2rem !important;
+}
+::selection { background: #6A00FF; color: white; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -431,9 +549,9 @@ st.markdown('<div class="brand-mark"><span>♫</span><span>Accuracy</span><stron
 
 st.markdown("""
 <section class="dashboard-hero">
-  <div class="hero-eyebrow">MUSIC · DATA · DISCOVERY / 01</div>
+  <div class="hero-eyebrow">MUSIC / DATA / DISCOVERY — 001</div>
   <h1>O som também<br>é dado.</h1>
-  <p>Explore os elementos da sua faixa, investigue padrões musicais e conheça uma estimativa de potencial de popularidade.</p>
+  <p>Uma leitura dos elementos da sua faixa. Configure o som, explore os dados e investigue seu potencial de popularidade.</p>
 </section>
 """, unsafe_allow_html=True)
 
@@ -924,8 +1042,29 @@ with st.container(border=True):
         # RESULTADO
         # ========================================================
 
-        st.subheader("📈 Resultado da análise")
-        st.metric("Potencial de popularidade", f"{score}/100")
+        st.markdown('<div class="section-title">Resultado / leitura da faixa</div>', unsafe_allow_html=True)
+        st.markdown(f'''
+        <div style="
+            margin: .4rem 0 1.2rem 0;
+            padding: 1.35rem 1.5rem;
+            border: 1px solid rgba(164,105,255,.28);
+            border-left: 4px solid #6A00FF;
+            border-radius: 8px;
+            background: linear-gradient(110deg, rgba(24,14,37,.96), rgba(10,8,14,.96));
+        ">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+                <div>
+                    <div style="font:700 .7rem/1.4 sans-serif;letter-spacing:.18em;color:#B98BFF;text-transform:uppercase;">Índice estimado</div>
+                    <div style="font:normal clamp(2.7rem,6vw,4.6rem)/1.05 'EvilScratch',sans-serif;color:#fff;margin-top:.3rem;">{score}<span style="font:600 1rem sans-serif;color:#A99ABF;"> / 100</span></div>
+                </div>
+                <div style="font:700 .78rem/1.5 sans-serif;letter-spacing:.07em;color:#E9DFFF;text-transform:uppercase;padding:.55rem .8rem;border:1px solid rgba(164,105,255,.25);background:rgba(106,0,255,.13);border-radius:4px;">{categoria}</div>
+            </div>
+            <div style="height:7px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;margin-top:1.2rem;">
+                <div style="width:{score}%;height:100%;background:linear-gradient(90deg,#6A00FF,#B13DFF);box-shadow:0 0 18px rgba(106,0,255,.5);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font:600 .65rem/1.4 monospace;letter-spacing:.08em;color:#857694;margin-top:.45rem;"><span>0 — LOW</span><span>100 — HIGH</span></div>
+        </div>
+        ''', unsafe_allow_html=True)
         st.success(categoria)
 
         # ========================================================

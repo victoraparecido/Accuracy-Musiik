@@ -250,7 +250,8 @@ if not st.session_state.site_started:
     st.stop()
 
 # ============================================================
-# CSS
+# ============================================================
+# CSS — DASHBOARD REDESENHADO (SPLASH PRESERVADA)
 # ============================================================
 
 st.markdown("""
@@ -262,423 +263,350 @@ st.markdown("""
         font-style: normal;
     }
 
-    .section-title {
-        font-family: 'EvilScratch', sans-serif !important;
-        font-weight: normal !important;
-        color: #ffffff !important;
-        letter-spacing: 0 !important;
-        line-height: 1.2 !important;
-        font-size: clamp(1.65rem, 3vw, 2.25rem) !important;
-        margin: 2.4rem 0 .35rem 0 !important;
-    }
-
-    .hero-title {
-        font-family: 'EvilScratch', sans-serif !important;
-        font-weight: normal !important;
-        font-size: clamp(2.5rem, 6vw, 5rem) !important;
-        line-height: 1.08 !important;
-        letter-spacing: 0 !important;
-        color: #ffffff !important;
-        margin: 0 0 1rem 0 !important;
-    }
-
-    /* Fundo original em tons de roxo, sem vídeo */
-    .stApp {
-        background:
-            radial-gradient(ellipse at 18% 18%, rgba(124, 35, 190, .30), transparent 38%),
-            radial-gradient(ellipse at 82% 72%, rgba(91, 24, 150, .24), transparent 42%),
-            linear-gradient(135deg, #100519 0%, #1b082b 48%, #09030f 100%) !important;
-        background-attachment: fixed !important;
-        color: white;
-        overflow-x: hidden;
-    }
-
-    [data-testid="stAppViewContainer"] {
-        background: transparent !important;
-    }
-    [data-testid="stHeader"] { background: transparent !important; }
-
-    /* Remove elementos padrão */
-    #MainMenu {
-        visibility: hidden;
-    }
-
-    footer {
-        visibility: hidden;
-    }
-
-    header {
-        visibility: hidden;
-    }
-
-    /* Glitch cinematográfico: cortes digitais rápidos em roxo e magenta. */
-    .stApp::before,
-    .stApp::after {
-        content: "";
-        position: fixed;
-        inset: 0;
-        z-index: 999999;
-        pointer-events: none;
-        opacity: 0;
-        will-change: opacity, transform, clip-path;
-    }
-    .stApp::before {
-        background:
-            linear-gradient(90deg, transparent 0 8%, rgba(106, 0, 255, .48) 8.2% 8.8%, transparent 9% 100%),
-            repeating-linear-gradient(0deg, transparent 0 9px, rgba(190, 130, 255, .20) 10px 11px, transparent 12px 21px),
-            linear-gradient(90deg, transparent 0 18%, rgba(255, 255, 255, .20) 18.2% 18.6%, transparent 19% 100%);
-        mix-blend-mode: screen;
-        animation: glitch-slices 1.2s steps(1, end) both;
-    }
-    .stApp::after {
-        background: linear-gradient(90deg,
-            rgba(106, 0, 255, .0) 0%,
-            rgba(106, 0, 255, .18) 28%,
-            rgba(255, 255, 255, .12) 50%,
-            rgba(190, 0, 255, .20) 72%,
-            rgba(106, 0, 255, .0) 100%);
-        mix-blend-mode: screen;
-        animation: glitch-scan 1.2s steps(1, end) both;
-    }
-
-    /* Espaçamento e hierarquia visual */
-    .block-container {
-        max-width: 1180px;
-        padding-top: 2.8rem;
-        padding-bottom: 4rem;
-        animation: main-site-fade-in 2.15s cubic-bezier(.2, .7, .2, 1) .12s both;
-    }
-
-    @keyframes glitch-slices {
-        0%, 100% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
-        9%  { opacity: .9; transform: translateX(-7px); clip-path: inset(12% 0 76% 0); }
-        13% { opacity: .55; transform: translateX(8px); clip-path: inset(42% 0 49% 0); }
-        18% { opacity: .85; transform: translateX(-3px); clip-path: inset(71% 0 18% 0); }
-        24% { opacity: .28; transform: translateX(5px); clip-path: inset(27% 0 66% 0); }
-        31% { opacity: .72; transform: translateX(-10px); clip-path: inset(53% 0 34% 0); }
-        38% { opacity: .18; transform: translateX(3px); clip-path: inset(5% 0 87% 0); }
-        48% { opacity: .48; transform: translateX(-4px); clip-path: inset(83% 0 8% 0); }
-        61% { opacity: .12; transform: translateX(2px); clip-path: inset(35% 0 58% 0); }
-        100% { opacity: 0; transform: translateX(0); clip-path: inset(0 0 100% 0); }
-    }
-    @keyframes glitch-scan {
-        0%, 100% { opacity: 0; transform: translateX(0); }
-        11% { opacity: .35; transform: translateX(12px); }
-        16% { opacity: .08; transform: translateX(-15px); }
-        29% { opacity: .42; transform: translateX(7px); }
-        34% { opacity: .12; transform: translateX(-5px); }
-        47% { opacity: .30; transform: translateX(10px); }
-        56% { opacity: .05; transform: translateX(-8px); }
-        68% { opacity: .16; transform: translateX(3px); }
-    }
-
-    @keyframes main-site-fade-in {
-        0% {
-            opacity: 0;
-            transform: translateY(18px) scale(.985);
-            filter: blur(5px);
-        }
-        65% { opacity: 1; filter: blur(1px); }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            filter: blur(0);
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .stApp::before, .stApp::after, .block-container, .splash-logo { animation: none !important; }
-    }
-
-    .brand-mark {
-        display: flex;
-        align-items: center;
-        gap: 9px;
-        margin: 0 0 2.4rem 0;
-        color: #e8d7ff;
-        font-size: 1.35rem;
-        font-weight: 600;
-        letter-spacing: -.025em;
-    }
-    .brand-mark strong { color: #ffffff; font-weight: 800; }
-
-    h1 {
-        text-align: center;
-        color: #ffffff !important;
-        font-size: clamp(2.1rem, 4vw, 3.1rem) !important;
-        letter-spacing: -.04em;
-        line-height: 1.15 !important;
-        margin: 0 0 .9rem 0 !important;
-    }
-
-    .hero-copy {
-        display: block;
-        width: 100%;
-        max-width: none;
-        margin: 0 auto 3.2rem auto;
-        color: #a995bd;
-        text-align: center !important;
-        font-size: 1.05rem;
-        line-height: 1.8;
-    }
-
-    /* Seleção de texto em tom roxo suave, evitando o azul intenso padrão */
-    ::selection {
-        background: rgba(160, 112, 195, .42);
-        color: #f3eaff;
-    }
-
-    h2, h3 {
-        color: #ffffff !important;
-        letter-spacing: -.02em;
-    }
-    h2 { margin-top: 2.4rem !important; margin-bottom: .35rem !important; }
-    h3 { margin-top: 2rem !important; margin-bottom: .35rem !important; }
-
-    .stCaption, [data-testid="stCaptionContainer"] {
-        color: #cbb8e5 !important;
-        line-height: 1.65;
-        margin-bottom: 1.2rem;
-    }
-
-    div[data-testid="stHorizontalBlock"] { gap: 1.25rem; }
-    [data-testid="stDivider"] {
-        margin: 1.5rem 0 2rem 0;
-        opacity: .35;
-    }
-    [data-testid="stNumberInput"], [data-testid="stSelectbox"],
-    [data-testid="stMultiSelect"], [data-testid="stRadio"],
-    [data-testid="stFileUploader"] {
-        margin-bottom: .8rem;
-    }
-
-    /* Inputs */
-    .stSelectbox label,
-    .stNumberInput label,
-    .stMultiSelect label,
-    .stRadio label,
-    .stFileUploader label {
-        color: #e5e1ec !important;
-        font-weight: 600;
-    }
-
-    /* Botão */
-    .stButton > button {
-        width: 100%;
-        border-radius: 12px;
-        border: none;
-        padding: 14px;
-        background: linear-gradient(
-            90deg,
-            #7b3ff2,
-            #a45cff
-        );
-        color: white;
-        font-size: 17px;
-        font-weight: 700;
-        transition: 0.2s;
-    }
-
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(140, 75, 255, 0.35);
-    }
-
-
-    .footer {
-        text-align: center;
-        margin-top: 50px;
-        padding: 20px;
-        color: #777184;
-        font-size: 13px;
-    }
-
+:root {
+    --am-purple: #6A00FF;
+    --am-purple-bright: #8F35FF;
+    --am-magenta: #D000FF;
+    --am-bg: #09070D;
+    --am-panel: rgba(20, 15, 29, .86);
+    --am-border: rgba(164, 105, 255, .22);
+    --am-text: #F5F0FF;
+    --am-muted: #A99ABF;
+}
+.stApp {
+    background:
+        radial-gradient(ellipse at 12% 8%, rgba(106, 0, 255, .22), transparent 32%),
+        radial-gradient(ellipse at 88% 38%, rgba(208, 0, 255, .10), transparent 30%),
+        radial-gradient(ellipse at 50% 100%, rgba(57, 12, 91, .24), transparent 40%),
+        linear-gradient(145deg, #09070D 0%, #100A18 52%, #07060A 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--am-text) !important;
+    overflow-x: hidden;
+}
+[data-testid="stAppViewContainer"], [data-testid="stHeader"] { background: transparent !important; }
+#MainMenu, footer, header { visibility: hidden; }
+.block-container {
+    max-width: 1320px !important;
+    padding-top: 2rem !important;
+    padding-bottom: 4rem !important;
+    animation: am-enter .7s cubic-bezier(.2,.7,.2,1) both;
+}
+@keyframes am-enter {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.brand-mark {
+    display: flex; align-items: center; gap: 9px;
+    margin: 0 0 1.2rem 0; color: #D8C5FF;
+    font-size: 1.08rem; font-weight: 600; letter-spacing: -.02em;
+}
+.brand-mark strong { color: white; font-weight: 850; }
+.dashboard-hero {
+    position: relative; overflow: hidden;
+    padding: clamp(1.5rem, 4vw, 3rem);
+    margin: 0 0 2.2rem 0;
+    border: 1px solid rgba(154, 86, 255, .28);
+    border-radius: 24px;
+    background: linear-gradient(115deg, rgba(26, 15, 39, .96), rgba(13, 10, 20, .82));
+    box-shadow: 0 18px 55px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.035);
+}
+.dashboard-hero::after {
+    content: ""; position: absolute; width: 260px; height: 260px;
+    right: -85px; top: -110px; border-radius: 50%;
+    background: rgba(106, 0, 255, .20); filter: blur(48px); pointer-events: none;
+}
+.hero-eyebrow {
+    display: inline-block; margin-bottom: 1rem;
+    color: #B98BFF; font: 700 .72rem/1.4 sans-serif;
+    letter-spacing: .22em; text-transform: uppercase;
+}
+.dashboard-hero h1 {
+    font-family: 'EvilScratch', sans-serif !important;
+    font-size: clamp(2.3rem, 6vw, 5rem) !important;
+    line-height: 1.05 !important; text-align: left !important;
+    letter-spacing: 0 !important; margin: 0 0 .8rem 0 !important;
+    color: #fff !important; position: relative; z-index: 1;
+}
+.dashboard-hero p {
+    color: #B9A9CD; max-width: 720px; font-size: 1.02rem;
+    line-height: 1.75; margin: 0; position: relative; z-index: 1;
+}
+.section-title {
+    font-family: 'EvilScratch', sans-serif !important;
+    font-weight: normal !important; color: #fff !important;
+    font-size: clamp(1.55rem, 2.5vw, 2.15rem) !important;
+    line-height: 1.18 !important; margin: .25rem 0 .45rem 0 !important;
+}
+h2, h3 { color: #F6EEFF !important; letter-spacing: -.02em; }
+[data-testid="stCaptionContainer"] {
+    color: var(--am-muted) !important; line-height: 1.65;
+    margin-bottom: 1rem;
+}
+[data-testid="stVerticalBlockBorderWrapper"] {
+    border: 1px solid var(--am-border) !important;
+    border-radius: 20px !important;
+    background: linear-gradient(145deg, rgba(25, 17, 36, .82), rgba(13, 10, 19, .88)) !important;
+    box-shadow: 0 12px 34px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.025);
+    padding: .35rem .25rem !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"] {
+    gap: .85rem;
+}
+div[data-testid="stHorizontalBlock"] { gap: 1.15rem; }
+[data-testid="stDivider"] { margin: 1.4rem 0 1.7rem 0; opacity: .24; }
+[data-testid="stSelectbox"], [data-testid="stNumberInput"],
+[data-testid="stMultiSelect"], [data-testid="stRadio"],
+[data-testid="stFileUploader"] { margin-bottom: .45rem; }
+.stSelectbox label, .stNumberInput label, .stMultiSelect label,
+.stRadio label, .stFileUploader label {
+    color: #E7DDF5 !important; font-weight: 650 !important;
+}
+/* Inputs: dark surfaces with a distinct violet focus */
+[data-baseweb="select"] > div, [data-testid="stNumberInput"] input {
+    background: rgba(9, 7, 14, .84) !important;
+    border-color: rgba(155, 111, 211, .34) !important;
+    color: #F8F3FF !important; border-radius: 12px !important;
+}
+[data-baseweb="select"] * { color: #F8F3FF !important; }
+[data-baseweb="select"]:focus-within > div,
+[data-testid="stNumberInput"] input:focus {
+    border-color: #8F35FF !important;
+    box-shadow: 0 0 0 1px rgba(106,0,255,.36) !important;
+}
+[data-testid="stMultiSelect"] [data-baseweb="tag"] {
+    background: rgba(106, 0, 255, .22) !important;
+    border: 1px solid rgba(164, 105, 255, .30) !important;
+    border-radius: 8px !important;
+}
+[data-testid="stRadio"] [role="radiogroup"] { gap: .65rem; }
+[data-testid="stRadio"] label {
+    background: rgba(11, 8, 16, .55);
+    border: 1px solid rgba(155, 111, 211, .20);
+    border-radius: 10px; padding: .45rem .75rem;
+}
+[data-testid="stFileUploader"] section {
+    background: rgba(10, 7, 15, .65) !important;
+    border: 1px dashed rgba(164, 105, 255, .38) !important;
+    border-radius: 15px !important;
+}
+[data-testid="stAudio"] { border-radius: 12px; }
+.stButton > button {
+    width: 100%; border-radius: 13px !important;
+    border: 1px solid rgba(188, 144, 255, .42) !important;
+    padding: 1rem 1.2rem !important;
+    background: linear-gradient(100deg, #6A00FF, #8B25F8 55%, #B13DFF) !important;
+    color: white !important; font-size: 1.02rem !important;
+    font-weight: 800 !important; letter-spacing: .015em;
+    box-shadow: 0 8px 28px rgba(106,0,255,.20);
+    transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.stButton > button:hover {
+    transform: translateY(-2px); filter: brightness(1.08);
+    box-shadow: 0 12px 34px rgba(106,0,255,.36);
+}
+[data-testid="stMetric"] {
+    background: rgba(18, 12, 27, .75);
+    border: 1px solid rgba(164, 105, 255, .20);
+    border-radius: 15px; padding: 1rem 1.1rem;
+}
+[data-testid="stMetricLabel"] { color: #BBA9D4 !important; }
+[data-testid="stMetricValue"] { color: #F7F0FF !important; }
+[data-testid="stAlert"] { border-radius: 14px !important; }
+.footer {
+    text-align: center; margin-top: 45px; padding: 20px;
+    color: #777184; font-size: 13px;
+}
+::selection { background: rgba(106,0,255,.45); color: #fff; }
+@media (prefers-reduced-motion: reduce) {
+    .block-container { animation: none !important; }
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ============================================================
-# LOGO
+# IDENTIDADE VISUAL / HERO
 # ============================================================
 
-st.markdown('<div class="brand-mark">🎵 <span>Accuracy</span><strong>Musiik</strong></div>', unsafe_allow_html=True)
+st.markdown('<div class="brand-mark"><span>♫</span><span>Accuracy</span><strong>Musiik</strong></div>', unsafe_allow_html=True)
 
-# ============================================================
-# HERO
-# ============================================================
+st.markdown("""
+<section class="dashboard-hero">
+  <div class="hero-eyebrow">MUSIC · DATA · DISCOVERY / 01</div>
+  <h1>O som também<br>é dado.</h1>
+  <p>Explore os elementos da sua faixa, investigue padrões musicais e conheça uma estimativa de potencial de popularidade.</p>
+</section>
+""", unsafe_allow_html=True)
 
-st.markdown('<h1 class="hero-title">Sua música Novas possibilidades</h1>', unsafe_allow_html=True)
-st.markdown('<p class="hero-copy">Conheça os fatores da sua faixa e explore uma estimativa do seu potencial de popularidade.</p>', unsafe_allow_html=True)
-
-# ============================================================
 # INFORMAÇÕES DA MÚSICA
 # ============================================================
 
-st.markdown('<h2 class="section-title">🎧 Vamos conhecer sua faixa</h2>', unsafe_allow_html=True)
-st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
+with st.container(border=True):
+    st.markdown('<h2 class="section-title">🎧 Vamos conhecer sua faixa</h2>', unsafe_allow_html=True)
+    st.caption("Comece pelos dados principais: ritmo, estilo musical e plataforma.")
 
-# ============================================================
-# PRIMEIRA LINHA
-# ============================================================
+    # ============================================================
+    # PRIMEIRA LINHA
+    # ============================================================
 
-col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
 
-with col1:
-    bpm = st.number_input(
-        "BPM",
-        min_value=40,
-        max_value=250,
-        value=120,
-        step=1,
-        help="Batidas por minuto da música."
-    )
+    with col1:
+        bpm = st.number_input(
+            "BPM",
+            min_value=40,
+            max_value=250,
+            value=120,
+            step=1,
+            help="Batidas por minuto da música."
+        )
 
-with col2:
-    genero = st.selectbox(
-        "Gênero musical",
-        [
-            # ROCK
-            "Rock",
-            "Rock Alternativo",
-            "Hard Rock",
-            "Punk Rock",
-            "Indie Rock",
-            "Pop Rock",
-            "Grunge",
-            "Rock Psicodélico",
+    with col2:
+        genero = st.selectbox(
+            "Gênero musical",
+            [
+                # ROCK
+                "Rock",
+                "Rock Alternativo",
+                "Hard Rock",
+                "Punk Rock",
+                "Indie Rock",
+                "Pop Rock",
+                "Grunge",
+                "Rock Psicodélico",
 
-            # POP
-            "Pop",
-            "Synthpop",
-            "Electropop",
-            "Dance Pop",
-            "Indie Pop",
-            "K-Pop",
-            "J-Pop",
-            "Pop Latino",
+                # POP
+                "Pop",
+                "Synthpop",
+                "Electropop",
+                "Dance Pop",
+                "Indie Pop",
+                "K-Pop",
+                "J-Pop",
+                "Pop Latino",
 
-            # HIP-HOP / RAP
-            "Hip-Hop",
-            "Rap",
-            "Trap",
-            "Drill",
-            "Boom Bap",
-            "Gangsta Rap",
-            "Conscious Rap",
-            "Lo-fi Hip-Hop",
+                # HIP-HOP / RAP
+                "Hip-Hop",
+                "Rap",
+                "Trap",
+                "Drill",
+                "Boom Bap",
+                "Gangsta Rap",
+                "Conscious Rap",
+                "Lo-fi Hip-Hop",
 
-            # ELETRÔNICA
-            "Eletrônica",
-            "House",
-            "Deep House",
-            "Tech House",
-            "Techno",
-            "Trance",
-            "Dubstep",
-            "Drum & Bass",
-            "EDM",
-            "Future Bass",
+                # ELETRÔNICA
+                "Eletrônica",
+                "House",
+                "Deep House",
+                "Tech House",
+                "Techno",
+                "Trance",
+                "Dubstep",
+                "Drum & Bass",
+                "EDM",
+                "Future Bass",
 
-            # JAZZ
-            "Jazz",
-            "Bebop",
-            "Swing",
-            "Smooth Jazz",
-            "Jazz Fusion",
-            "Free Jazz",
+                # JAZZ
+                "Jazz",
+                "Bebop",
+                "Swing",
+                "Smooth Jazz",
+                "Jazz Fusion",
+                "Free Jazz",
 
-            # CLÁSSICA
-            "Música Clássica",
-            "Barroco",
-            "Romântica",
-            "Ópera",
-            "Sinfônica",
+                # CLÁSSICA
+                "Música Clássica",
+                "Barroco",
+                "Romântica",
+                "Ópera",
+                "Sinfônica",
 
-            # BLUES
-            "Blues",
-            "Delta Blues",
-            "Chicago Blues",
-            "Electric Blues",
-            "Blues Rock",
+                # BLUES
+                "Blues",
+                "Delta Blues",
+                "Chicago Blues",
+                "Electric Blues",
+                "Blues Rock",
 
-            # COUNTRY
-            "Country",
-            "Country Pop",
-            "Bluegrass",
-            "Outlaw Country",
-            "Country Rock",
+                # COUNTRY
+                "Country",
+                "Country Pop",
+                "Bluegrass",
+                "Outlaw Country",
+                "Country Rock",
 
-            # LATIN
-            "Latin",
-            "Reggaeton",
-            "Salsa",
-            "Bachata",
-            "Merengue",
-            "Latin Pop",
+                # LATIN
+                "Latin",
+                "Reggaeton",
+                "Salsa",
+                "Bachata",
+                "Merengue",
+                "Latin Pop",
 
-            # MÚSICA BRASILEIRA
-            "Música Brasileira",
-            "MPB",
-            "Sertanejo",
-            "Funk Brasileiro",
-            "Pagode",
-            "Samba",
-            "Forró",
-            "Bossa Nova",
-            "Axé",
+                # MÚSICA BRASILEIRA
+                "Música Brasileira",
+                "MPB",
+                "Sertanejo",
+                "Funk Brasileiro",
+                "Pagode",
+                "Samba",
+                "Forró",
+                "Bossa Nova",
+                "Axé",
 
-            # R&B / SOUL
-            "R&B",
-            "Contemporary R&B",
-            "Neo Soul",
-            "Soul",
-            "Funk Soul",
-            "Motown",
+                # R&B / SOUL
+                "R&B",
+                "Contemporary R&B",
+                "Neo Soul",
+                "Soul",
+                "Funk Soul",
+                "Motown",
 
-            # REGGAE
-            "Reggae",
-            "Dancehall",
-            "Dub",
-            "Ska",
+                # REGGAE
+                "Reggae",
+                "Dancehall",
+                "Dub",
+                "Ska",
 
-            # METAL
-            "Metal",
-            "Heavy Metal",
-            "Thrash Metal",
-            "Death Metal",
-            "Black Metal",
-            "Metalcore",
+                # METAL
+                "Metal",
+                "Heavy Metal",
+                "Thrash Metal",
+                "Death Metal",
+                "Black Metal",
+                "Metalcore",
 
-            # FOLK
-            "Folk",
-            "Indie Folk",
-            "Folk Rock",
-            "Acoustic Folk",
-            "Contemporary Folk",
+                # FOLK
+                "Folk",
+                "Indie Folk",
+                "Folk Rock",
+                "Acoustic Folk",
+                "Contemporary Folk",
 
-            # GOSPEL
-            "Gospel",
-            "Contemporary Gospel",
-            "Gospel Rock",
-            "Gospel R&B",
+                # GOSPEL
+                "Gospel",
+                "Contemporary Gospel",
+                "Gospel Rock",
+                "Gospel R&B",
 
-            # OUTROS
-            "Outro"
-        ]
-    )
+                # OUTROS
+                "Outro"
+            ]
+        )
 
-with col3:
-    streaming = st.selectbox(
-        "Streaming usado",
-        [
-            "Spotify",
-            "YouTube Music",
-            "Apple Music",
-            "Amazon Music",
-            "Deezer",
-            "SoundCloud",
-            "Outro"
-        ]
-    )
+    with col3:
+        streaming = st.selectbox(
+            "Streaming usado",
+            [
+                "Spotify",
+                "YouTube Music",
+                "Apple Music",
+                "Amazon Music",
+                "Deezer",
+                "SoundCloud",
+                "Outro"
+            ]
+        )
 
 st.divider()
 
@@ -694,120 +622,125 @@ duracao_formatada = "Aguardando arquivo de áudio"
 # INSTRUMENTOS
 # ============================================================
 
-st.markdown('<h2 class="section-title">🎸 Elementos sonoros</h2>', unsafe_allow_html=True)
-st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
+with st.container(border=True):
+    st.markdown('<h2 class="section-title">🎸 Elementos sonoros</h2>', unsafe_allow_html=True)
+    st.caption("Marque os instrumentos e sons que fazem parte da faixa.")
 
-instrumentos = st.multiselect(
-    "Instrumentos utilizados",
-    [
-        # CORDAS
-        "Cordas — Violão",
-        "Cordas — Guitarra elétrica",
-        "Cordas — Guitarra acústica",
-        "Cordas — Baixo elétrico",
-        "Cordas — Contrabaixo acústico",
-        "Cordas — Ukulele",
-        "Cordas — Harpa",
-        "Cordas — Violino",
-        "Cordas — Viola de arco",
-        "Cordas — Violoncelo",
-        "Cordas — Bandolim",
-        "Cordas — Banjo",
-        "Cordas — Cavaquinho",
-        "Cordas — Harpa celta",
+    instrumentos = st.multiselect(
+        "Instrumentos utilizados",
+        [
+            # CORDAS
+            "Cordas — Violão",
+            "Cordas — Guitarra elétrica",
+            "Cordas — Guitarra acústica",
+            "Cordas — Baixo elétrico",
+            "Cordas — Contrabaixo acústico",
+            "Cordas — Ukulele",
+            "Cordas — Harpa",
+            "Cordas — Violino",
+            "Cordas — Viola de arco",
+            "Cordas — Violoncelo",
+            "Cordas — Bandolim",
+            "Cordas — Banjo",
+            "Cordas — Cavaquinho",
+            "Cordas — Harpa celta",
 
-        # TECLAS
-        "Teclas — Piano acústico",
-        "Teclas — Piano elétrico",
-        "Teclas — Teclado",
-        "Teclas — Órgão",
-        "Teclas — Cravo",
-        "Teclas — Rhodes",
-        "Teclas — Wurlitzer",
-        "Teclas — Clavinet",
+            # TECLAS
+            "Teclas — Piano acústico",
+            "Teclas — Piano elétrico",
+            "Teclas — Teclado",
+            "Teclas — Órgão",
+            "Teclas — Cravo",
+            "Teclas — Rhodes",
+            "Teclas — Wurlitzer",
+            "Teclas — Clavinet",
 
-        # PERCUSSÃO E BATERIA
-        "Percussão — Bateria acústica",
-        "Percussão — Bateria eletrônica",
-        "Percussão — Cajón",
-        "Percussão — Congas",
-        "Percussão — Bongôs",
-        "Percussão — Pandeiro",
-        "Percussão — Tamborim",
-        "Percussão — Atabaque",
-        "Percussão — Tímpanos",
-        "Percussão — Marimba",
-        "Percussão — Xilofone",
-        "Percussão — Vibrafone",
-        "Percussão — Glockenspiel",
-        "Percussão — Triângulo",
-        "Percussão — Agogô",
-        "Percussão — Chocalho / Ganzá",
-        "Percussão — Cowbell",
+            # PERCUSSÃO E BATERIA
+            "Percussão — Bateria acústica",
+            "Percussão — Bateria eletrônica",
+            "Percussão — Cajón",
+            "Percussão — Congas",
+            "Percussão — Bongôs",
+            "Percussão — Pandeiro",
+            "Percussão — Tamborim",
+            "Percussão — Atabaque",
+            "Percussão — Tímpanos",
+            "Percussão — Marimba",
+            "Percussão — Xilofone",
+            "Percussão — Vibrafone",
+            "Percussão — Glockenspiel",
+            "Percussão — Triângulo",
+            "Percussão — Agogô",
+            "Percussão — Chocalho / Ganzá",
+            "Percussão — Cowbell",
 
-        # SOPROS
-        "Sopros — Saxofone alto",
-        "Sopros — Saxofone tenor",
-        "Sopros — Saxofone barítono",
-        "Sopros — Trompete",
-        "Sopros — Trombone",
-        "Sopros — Tuba",
-        "Sopros — Flauta transversal",
-        "Sopros — Flauta doce",
-        "Sopros — Clarinete",
-        "Sopros — Oboé",
-        "Sopros — Fagote",
-        "Sopros — Gaita",
-        "Sopros — Harmônica",
+            # SOPROS
+            "Sopros — Saxofone alto",
+            "Sopros — Saxofone tenor",
+            "Sopros — Saxofone barítono",
+            "Sopros — Trompete",
+            "Sopros — Trombone",
+            "Sopros — Tuba",
+            "Sopros — Flauta transversal",
+            "Sopros — Flauta doce",
+            "Sopros — Clarinete",
+            "Sopros — Oboé",
+            "Sopros — Fagote",
+            "Sopros — Gaita",
+            "Sopros — Harmônica",
 
-        # ELETRÔNICOS E SINTETIZADORES
-        "Eletrônico — Sintetizador",
-        "Eletrônico — Sampler",
-        "Eletrônico — Drum machine",
-        "Eletrônico — Sequenciador",
-        "Eletrônico — Controlador MIDI",
-        "Eletrônico — Theremin",
-        "Eletrônico — Vocoder",
+            # ELETRÔNICOS E SINTETIZADORES
+            "Eletrônico — Sintetizador",
+            "Eletrônico — Sampler",
+            "Eletrônico — Drum machine",
+            "Eletrônico — Sequenciador",
+            "Eletrônico — Controlador MIDI",
+            "Eletrônico — Theremin",
+            "Eletrônico — Vocoder",
 
-        # VOZ E OUTROS
-        "Voz — Vocal principal",
-        "Voz — Backing vocals",
-        "Voz — Coral",
-        "Voz — Beatbox",
-        "Outros — Instrumento regional",
-        "Outros — Outro instrumento"
-    ],
-    help="As opções estão organizadas por famílias para facilitar a seleção."
-)
+            # VOZ E OUTROS
+            "Voz — Vocal principal",
+            "Voz — Backing vocals",
+            "Voz — Coral",
+            "Voz — Beatbox",
+            "Outros — Instrumento regional",
+            "Outros — Outro instrumento"
+        ],
+        help="As opções estão organizadas por famílias para facilitar a seleção."
+    )
 
-# ============================================================
+    # ============================================================
 # PLATAFORMA DE MIXAGEM (OPCIONAL)
 # ============================================================
 
-plataforma_mixagem = st.selectbox(
-    "Plataforma de mixagem (opcional)",
-    [
-        "Não informar",
-        "FL Studio",
-        "Ableton Live",
-        "Logic Pro",
-        "Pro Tools",
-        "Cubase",
-        "Studio One",
-        "REAPER",
-        "GarageBand",
-        "BandLab",
-        "Soundtrap",
-        "Audacity",
-        "Bitwig Studio",
-        "Reason",
-        "Maschine",
-        "Serato Studio",
-        "LMMS",
-        "Outra"
-    ],
-    help="Selecione o programa usado na produção ou mixagem, se desejar."
-)
+with st.container(border=True):
+    st.markdown('<h2 class="section-title">🎚️ Produção & mixagem</h2>', unsafe_allow_html=True)
+    st.caption("Informe a plataforma de produção, se ela fez parte do processo.")
+
+    plataforma_mixagem = st.selectbox(
+        "Plataforma de mixagem (opcional)",
+        [
+            "Não informar",
+            "FL Studio",
+            "Ableton Live",
+            "Logic Pro",
+            "Pro Tools",
+            "Cubase",
+            "Studio One",
+            "REAPER",
+            "GarageBand",
+            "BandLab",
+            "Soundtrap",
+            "Audacity",
+            "Bitwig Studio",
+            "Reason",
+            "Maschine",
+            "Serato Studio",
+            "LMMS",
+            "Outra"
+        ],
+        help="Selecione o programa usado na produção ou mixagem, se desejar."
+    )
 
 st.divider()
 
@@ -815,24 +748,25 @@ st.divider()
 # CARACTERÍSTICAS
 # ============================================================
 
-st.markdown('<h2 class="section-title">🎛️ Detalhes da faixa</h2>', unsafe_allow_html=True)
-st.caption("Conte um pouco mais sobre a produção e as parcerias.")
+with st.container(border=True):
+    st.markdown('<h2 class="section-title">🎛️ Detalhes da faixa</h2>', unsafe_allow_html=True)
+    st.caption("Conte um pouco mais sobre a produção e as parcerias.")
 
-col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2)
 
-with col1:
-    acustico = st.radio(
-        "A música é acústica?",
-        ["Sim", "Não"],
-        horizontal=True
-    )
+    with col1:
+        acustico = st.radio(
+            "A música é acústica?",
+            ["Sim", "Não"],
+            horizontal=True
+        )
 
-with col2:
-    feat = st.radio(
-        "Possui feat/parceria?",
-        ["Sim", "Não"],
-        horizontal=True
-    )
+    with col2:
+        feat = st.radio(
+            "Possui feat/parceria?",
+            ["Sim", "Não"],
+            horizontal=True
+        )
 
 st.divider()
 
@@ -840,47 +774,48 @@ st.divider()
 # ARQUIVO DE ÁUDIO E DURAÇÃO AUTOMÁTICA
 # ============================================================
 
-st.markdown('<h2 class="section-title">🎵 Envie sua faixa</h2>', unsafe_allow_html=True)
-st.caption("Ao adicionar o áudio, a duração será identificada automaticamente.")
+with st.container(border=True):
+    st.markdown('<h2 class="section-title">🎵 Envie sua faixa</h2>', unsafe_allow_html=True)
+    st.caption("Ao adicionar o áudio, a duração será identificada automaticamente.")
 
-arquivo_musica = st.file_uploader(
-    "Escolha o arquivo de áudio",
-    type=[
-        "mp3",
-        "wav",
-        "m4a",
-        "flac",
-        "ogg"
-    ],
-    help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
-)
+    arquivo_musica = st.file_uploader(
+        "Escolha o arquivo de áudio",
+        type=[
+            "mp3",
+            "wav",
+            "m4a",
+            "flac",
+            "ogg"
+        ],
+        help="Formatos aceitos: MP3, WAV, M4A, FLAC e OGG."
+    )
 
-duracao_segundos = None
-duracao_formatada = "Não identificada"
+    duracao_segundos = None
+    duracao_formatada = "Não identificada"
 
-if arquivo_musica is not None:
-    st.success(f"Arquivo carregado: {arquivo_musica.name}")
-    st.audio(arquivo_musica)
+    if arquivo_musica is not None:
+        st.success(f"Arquivo carregado: {arquivo_musica.name}")
+        st.audio(arquivo_musica)
 
-    if MutagenFile is not None:
-        try:
-            audio_bytes = arquivo_musica.getvalue()
-            audio_info = MutagenFile(io.BytesIO(audio_bytes))
+        if MutagenFile is not None:
+            try:
+                audio_bytes = arquivo_musica.getvalue()
+                audio_info = MutagenFile(io.BytesIO(audio_bytes))
 
-            if audio_info is not None and audio_info.info is not None:
-                duracao_segundos = int(round(audio_info.info.length))
-                minutos_detectados, segundos_detectados = divmod(duracao_segundos, 60)
-                duracao_formatada = f"{minutos_detectados}:{segundos_detectados:02d}"
-                st.metric("⏱️ Duração detectada", duracao_formatada)
-            else:
-                st.warning("Não foi possível identificar a duração deste arquivo.")
-        except Exception:
-            st.warning("Não foi possível ler a duração do áudio. Verifique se o arquivo está válido.")
-    else:
-        st.error(
-            "A leitura automática da duração precisa da biblioteca Mutagen. "
-            "Adicione 'mutagen' ao arquivo requirements.txt do projeto."
-        )
+                if audio_info is not None and audio_info.info is not None:
+                    duracao_segundos = int(round(audio_info.info.length))
+                    minutos_detectados, segundos_detectados = divmod(duracao_segundos, 60)
+                    duracao_formatada = f"{minutos_detectados}:{segundos_detectados:02d}"
+                    st.metric("⏱️ Duração detectada", duracao_formatada)
+                else:
+                    st.warning("Não foi possível identificar a duração deste arquivo.")
+            except Exception:
+                st.warning("Não foi possível ler a duração do áudio. Verifique se o arquivo está válido.")
+        else:
+            st.error(
+                "A leitura automática da duração precisa da biblioteca Mutagen. "
+                "Adicione 'mutagen' ao arquivo requirements.txt do projeto."
+            )
 
 st.divider()
 
@@ -964,84 +899,85 @@ def gerar_resultado():
 
 st.write("")
 
-if st.button("🚀 Analisar potencial da faixa"):
+with st.container(border=True):
+    if st.button("🚀 Analisar potencial da faixa"):
 
-    score = gerar_resultado()
+        score = gerar_resultado()
 
-    # --------------------------------------------------------
-    # CLASSIFICAÇÃO
-    # --------------------------------------------------------
+        # --------------------------------------------------------
+        # CLASSIFICAÇÃO
+        # --------------------------------------------------------
 
-    if score >= 80:
-        categoria = "🔥 Alto potencial de popularidade"
+        if score >= 80:
+            categoria = "🔥 Alto potencial de popularidade"
 
-    elif score >= 60:
-        categoria = "🟢 Bom potencial de popularidade"
+        elif score >= 60:
+            categoria = "🟢 Bom potencial de popularidade"
 
-    elif score >= 40:
-        categoria = "🟡 Potencial moderado"
+        elif score >= 40:
+            categoria = "🟡 Potencial moderado"
 
-    else:
-        categoria = "🔵 Potencial baixo"
+        else:
+            categoria = "🔵 Potencial baixo"
 
-    # ========================================================
-    # RESULTADO
-    # ========================================================
+        # ========================================================
+        # RESULTADO
+        # ========================================================
 
-    st.subheader("📈 Resultado da análise")
-    st.metric("Potencial de popularidade", f"{score}/100")
-    st.success(categoria)
+        st.subheader("📈 Resultado da análise")
+        st.metric("Potencial de popularidade", f"{score}/100")
+        st.success(categoria)
 
-    # ========================================================
-    # MÉTRICAS
-    # ========================================================
+        # ========================================================
+        # MÉTRICAS
+        # ========================================================
 
-    st.write("")
+        st.write("")
 
-    col1, col2, col3, col4 = st.columns(4)
+        col1, col2, col3, col4 = st.columns(4)
 
-    with col1:
-        st.metric("BPM", bpm)
+        with col1:
+            st.metric("BPM", bpm)
 
-    with col2:
-        st.metric("Duração", duracao_formatada)
+        with col2:
+            st.metric("Duração", duracao_formatada)
 
-    with col3:
-        st.metric("Instrumentos", len(instrumentos))
+        with col3:
+            st.metric("Instrumentos", len(instrumentos))
 
-    with col4:
-        st.metric("Gênero", genero)
+        with col4:
+            st.metric("Gênero", genero)
 
-    # ========================================================
-    # DETALHES
-    # ========================================================
+        # ========================================================
+        # DETALHES
+        # ========================================================
 
-    st.write("")
+        st.write("")
 
-    st.subheader("📊 Detalhes da análise")
+        st.subheader("📊 Detalhes da análise")
 
-    st.write(f"**Gênero:** {genero}")
-    st.write(f"**Streaming:** {streaming}")
-    st.write(f"**BPM:** {bpm}")
-    st.write(f"**Duração:** {duracao_formatada}")
-    st.write(
-        f"**Instrumentos:** "
-        f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
-    )
-    st.write(f"**Acústico:** {acustico}")
-    st.write(f"**Feat/parceria:** {feat}")
-    if plataforma_mixagem != "Não informar":
-        st.write(f"**Plataforma de mixagem:** {plataforma_mixagem}")
-    else:
-        st.write("**Plataforma de mixagem:** Não informada")
+        st.write(f"**Gênero:** {genero}")
+        st.write(f"**Streaming:** {streaming}")
+        st.write(f"**BPM:** {bpm}")
+        st.write(f"**Duração:** {duracao_formatada}")
+        st.write(
+            f"**Instrumentos:** "
+            f"{', '.join(instrumentos) if instrumentos else 'Nenhum informado'}"
+        )
+        st.write(f"**Acústico:** {acustico}")
+        st.write(f"**Feat/parceria:** {feat}")
+        if plataforma_mixagem != "Não informar":
+            st.write(f"**Plataforma de mixagem:** {plataforma_mixagem}")
+        else:
+            st.write("**Plataforma de mixagem:** Não informada")
 
-    if arquivo_musica:
-        st.write(f"**Arquivo:** {arquivo_musica.name}")
-    else:
-        st.write("**Arquivo:** Nenhum arquivo enviado")
+        if arquivo_musica:
+            st.write(f"**Arquivo:** {arquivo_musica.name}")
+        else:
+            st.write("**Arquivo:** Nenhum arquivo enviado")
 
 
-# ============================================================
+    # ============================================================
 # RODAPÉ
 # ============================================================
 

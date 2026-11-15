@@ -1136,4 +1136,4 @@ with st.container(border=True):
 # ============================================================
 
 st.divider()
-st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")a
+st.caption("Accuracy Musiik © 2026 — Projeto acadêmico de Ciência de Dados e Machine Learning")

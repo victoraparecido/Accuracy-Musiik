@@ -583,6 +583,103 @@ div[data-testid="stHorizontalBlock"] { gap: 1.15rem; }
 .stApp [data-testid="stAppViewContainer"] [data-testid="stMarkdownContainer"] h4 {
     font-family: 'Coolvetica', sans-serif !important;
 }
+
+
+/* ==========================================================
+   ACURRACY MUSIIK — REFINAMENTO DOS CAMPOS E CONTROLES
+   Camada adicional: preserva layout, abertura e tipografia.
+   ========================================================== */
+:root {
+    --am-control-bg: #17121f;
+    --am-control-bg-hover: #20172b;
+    --am-control-border: rgba(174, 125, 235, .34);
+    --am-control-border-hover: rgba(190, 139, 255, .72);
+    --am-control-focus: #9B4DFF;
+}
+.stApp [data-testid="stWidgetLabel"] p,
+.stApp [data-testid="stWidgetLabel"] label,
+.stApp [data-testid="stWidgetLabel"] span {
+    color: #F1E9FC !important; font-weight: 650 !important;
+    letter-spacing: .015em !important;
+}
+.stApp [data-baseweb="select"] > div,
+.stApp [data-testid="stTextInput"] input,
+.stApp [data-testid="stNumberInput"] input,
+.stApp [data-testid="stTextArea"] textarea,
+.stApp [data-testid="stDateInput"] input {
+    background: var(--am-control-bg) !important; color: #FAF7FF !important;
+    border: 1px solid var(--am-control-border) !important;
+    border-radius: 9px !important; min-height: 42px !important;
+    transition: background .18s ease, border-color .18s ease, box-shadow .18s ease !important;
+}
+.stApp [data-baseweb="select"] > div:hover,
+.stApp [data-testid="stTextInput"] input:hover,
+.stApp [data-testid="stNumberInput"] input:hover,
+.stApp [data-testid="stTextArea"] textarea:hover,
+.stApp [data-testid="stDateInput"] input:hover {
+    background: var(--am-control-bg-hover) !important;
+    border-color: var(--am-control-border-hover) !important;
+}
+.stApp [data-baseweb="select"]:focus-within > div,
+.stApp [data-testid="stTextInput"] input:focus,
+.stApp [data-testid="stNumberInput"] input:focus,
+.stApp [data-testid="stTextArea"] textarea:focus,
+.stApp [data-testid="stDateInput"] input:focus {
+    border-color: var(--am-control-focus) !important;
+    box-shadow: 0 0 0 2px rgba(155, 77, 255, .19), 0 0 16px rgba(106, 0, 255, .12) !important;
+    outline: none !important;
+}
+.stApp [data-baseweb="select"] *,
+.stApp [data-testid="stNumberInput"] button,
+.stApp [data-testid="stDateInput"] button { color: #F7F1FF !important; }
+.stApp [data-testid="stNumberInput"] button {
+    background: #241A31 !important; border-left: 1px solid rgba(174, 125, 235, .25) !important;
+    transition: background .18s ease, color .18s ease !important;
+}
+.stApp [data-testid="stNumberInput"] button:hover { background: #39204F !important; color: #D9B8FF !important; }
+.stApp [data-baseweb="popover"] [role="listbox"], .stApp [data-baseweb="menu"] {
+    background: #1A1323 !important; border: 1px solid rgba(174, 125, 235, .36) !important;
+    border-radius: 10px !important; box-shadow: 0 14px 34px rgba(0, 0, 0, .42) !important;
+}
+.stApp [role="option"] { color: #F4EDFC !important; background: transparent !important; }
+.stApp [role="option"]:hover, .stApp [role="option"][aria-selected="true"] { background: rgba(106, 0, 255, .22) !important; }
+.stApp [data-testid="stMultiSelect"] [data-baseweb="tag"] {
+    background: linear-gradient(110deg, rgba(106, 0, 255, .28), rgba(143, 53, 255, .17)) !important;
+    border: 1px solid rgba(180, 130, 255, .42) !important; border-radius: 7px !important; padding: 2px 7px !important;
+}
+.stApp [data-testid="stMultiSelect"] [data-baseweb="tag"] span { color: #F8F2FF !important; }
+.stApp [data-testid="stRadio"] [role="radiogroup"] { gap: .55rem !important; }
+.stApp [data-testid="stRadio"] [role="radiogroup"] label {
+    background: #17121f !important; border: 1px solid rgba(174, 125, 235, .30) !important;
+    border-radius: 8px !important; padding: .48rem .8rem !important;
+    transition: border-color .18s ease, background .18s ease !important;
+}
+.stApp [data-testid="stRadio"] [role="radiogroup"] label:hover {
+    background: #24182f !important; border-color: rgba(190, 139, 255, .68) !important;
+}
+.stApp [data-testid="stCheckbox"] label { color: #EDE4F8 !important; }
+.stApp [data-testid="stCheckbox"] input:checked + div,
+.stApp [data-testid="stCheckbox"] [data-checked="true"] { background: #7B22E8 !important; border-color: #B77BFF !important; }
+.stApp [data-testid="stFileUploader"] section {
+    background: rgba(23, 18, 31, .78) !important; border: 1px dashed rgba(174, 125, 235, .48) !important;
+    border-radius: 10px !important; transition: border-color .18s ease, background .18s ease !important;
+}
+.stApp [data-testid="stFileUploader"] section:hover {
+    background: rgba(35, 23, 49, .88) !important; border-color: rgba(190, 139, 255, .82) !important;
+}
+.stApp [data-testid="stDownloadButton"] button, .stApp [data-testid="stFormSubmitButton"] button {
+    border: 1px solid rgba(174, 125, 235, .48) !important; border-radius: 8px !important;
+    transition: transform .18s ease, border-color .18s ease, background .18s ease !important;
+}
+.stApp [data-testid="stDownloadButton"] button:hover, .stApp [data-testid="stFormSubmitButton"] button:hover {
+    border-color: #B77BFF !important; background: rgba(106, 0, 255, .16) !important; transform: translateY(-1px);
+}
+@media (prefers-reduced-motion: reduce) {
+    .stApp [data-baseweb="select"] > div, .stApp [data-testid="stTextInput"] input,
+    .stApp [data-testid="stNumberInput"] input, .stApp [data-testid="stTextArea"] textarea,
+    .stApp [data-testid="stDateInput"] input { transition: none !important; }
+}
+
 </style>
 """, unsafe_allow_html=True)
 

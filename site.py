@@ -159,9 +159,9 @@ if not st.session_state.site_started:
             opacity: 0;
             will-change: opacity;
         }
-        .splash-title .font-palace { font-family: 'PalaceAthene', sans-serif; animation: font-palace-fade 9s ease-in-out infinite; }
-        .splash-title .font-grime { font-family: 'GrimeSlime', sans-serif; animation: font-grime-fade 9s ease-in-out infinite; }
-        .splash-title .font-youth { font-family: 'GraffitiYouth', sans-serif; animation: font-youth-fade 9s ease-in-out infinite; }
+        .splash-title .font-palace { font-family: 'PalaceAthene', sans-serif; animation: font-palace-fade 4.5s ease-in-out infinite; }
+        .splash-title .font-grime { font-family: 'GrimeSlime', sans-serif; animation: font-grime-fade 4.5s ease-in-out infinite; }
+        .splash-title .font-youth { font-family: 'GraffitiYouth', sans-serif; animation: font-youth-fade 4.5s ease-in-out infinite; }
         .splash-subtitle {
             color: #eee3ff;
             font-size: clamp(.98rem, 2vw, 1.08rem);
@@ -283,7 +283,7 @@ if not st.session_state.site_started:
     with center:
         progress = st.progress(0, text="Preparando sua experiência musical...")
         for value in range(1, 101):
-            time.sleep(0.05)
+            time.sleep(4.5)
             progress.progress(value, text="Carregando o Accuracy Musiik...")
         st.session_state.site_started = True
         st.rerun()
